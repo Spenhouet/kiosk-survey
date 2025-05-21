@@ -19,7 +19,7 @@
 </script>
 
 <button
-    on:click={onClick}
+    onclick={onClick}
     disabled={disabled}
     class="{baseClasses} {customClass} text-white focus:ring-[var(--pill-bg-color)] hover:brightness-90"
     style="--pill-bg-color: {$pillButtonColor}; background-color: var(--pill-bg-color);"

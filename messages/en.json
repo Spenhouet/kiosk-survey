@@ -1,16 +1,11 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "hello_world": "Hello, {name} from en!",
   "language_name": "English",
-  "app_title": "Client-Side Survey",
+  "app_title": "KioskSurvey",
   "survey_page_title": "Survey Time!",
   "results_page_title": "Survey Results",
   "settings_page_title": "Survey Settings",
-  "default_survey_question": "What is your favorite Svelte feature?",
-  "answer_reactivity": "Reactivity",
-  "answer_stores": "Stores",
-  "answer_transitions": "Transitions",
-  "answer_ssr_ssg": "SSR/SSG",
+  "default_survey_question": "Do you like KioskSurvey?",
   "repeat_survey_button": "Repeat Survey",
   "settings_icon_label": "Settings",
   "edit_question_label": "Survey Question",
@@ -33,9 +28,8 @@
   "option_text_placeholder": "Answer text",
   "locale_name_de": "German",
   "locale_name_en": "English",
-  "default_question": "Do you like KioskSurvey?",
-  "yes": "Yes",
-  "no": "No",
   "pill_button_color_label": "Options",
-  "theme_settings_label": "Appearance"
+  "theme_settings_label": "Appearance",
+  "default_answer_option_1": "👍 Yes",
+  "default_answer_option_2": "❌ No"
 }
