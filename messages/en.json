@@ -17,7 +17,7 @@
   "answer_options_label": "Answer Options",
   "add_option_button": "Add Option",
   "remove_answer_label": "Remove answer",
-  "background_color_label": "Application Background",
+  "background_color_label": "Background",
   "view_results_button": "View Current Results",
   "clear_results_button": "Clear All Results",
   "reset_survey_button": "Reset Survey to Defaults",
@@ -25,7 +25,7 @@
   "total_votes_label": "Total Votes: {count}",
   "no_responses_message": "No responses yet. Be the first!",
   "confirm_clear_results_message": "Are you sure you want to clear all results? This cannot be undone.",
-  "confirm_reset_survey_message": "Reset survey to default question & answers? Current results will also be cleared.",
+  "confirm_reset_survey_message": "Reset survey to default question and answers? Current results will also be cleared.",
   "yes_button": "Yes",
   "cancel_button": "Cancel",
   "votes_suffix_singular": "vote",
@@ -35,5 +35,7 @@
   "locale_name_en": "English",
   "default_question": "Do you like KioskSurvey?",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "pill_button_color_label": "Options",
+  "theme_settings_label": "Appearance"
 }

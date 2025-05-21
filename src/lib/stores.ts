@@ -1,5 +1,4 @@
 import { persisted } from 'svelte-persisted-store';
-import { writable } from 'svelte/store';
 import { m } from "$lib/paraglide/messages.js";
 import { type Locale, getLocale } from "$lib/paraglide/runtime";
 
@@ -29,6 +28,7 @@ export const surveyAnswers = persisted<AnswerOption[]>('surveyApp_answers', init
 export const surveyResults = persisted<Record<string, number>>('surveyApp_results', {});
 
 export const appBackgroundColor = persisted<string>('surveyApp_backgroundColor', '#282c34'); // A darker default
+export const pillButtonColor = persisted<string>('surveyApp_pillButtonColor', '#007bff'); // Default pill button color
 
 // --- Helper functions for stores ---
 export function recordAnswer(answerId: string) {
