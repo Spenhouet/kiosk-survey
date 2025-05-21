@@ -28,7 +28,6 @@
 {#if currentSurvey}
     <h2>{currentSurvey.name}</h2>
 
-
     <div class="w-full max-w-xl text-center">
         <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-200">
             {m.results_page_title()}: {currentSurvey.question}
