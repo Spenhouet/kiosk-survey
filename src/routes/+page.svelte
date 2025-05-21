@@ -1,38 +1,41 @@
 <script lang="ts">
-    import { surveys, createNewSurvey, deleteSurvey, updateSurveyDetails, resetSurveyResults } from '$lib/stores';
+    import { surveys, createNewSurvey, deleteSurvey, resetSurveyResults } from '$lib/stores';
     import { goto } from '$app/navigation';
-    import { m } from '$lib/paraglide/messages';
+    import { m } from "$lib/paraglide/messages.js";
     import { Icon } from '@steeze-ui/svelte-icon';
     import { PlusCircle, Trash, PlayCircle, Cog6Tooth, ArrowPath, ChartBar } from '@steeze-ui/heroicons';
     import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
+    import EditSurveyDialog from '$lib/components/EditSurveyDialog.svelte';
 
-    let showCreateModal = $state(false);
-    let newSurveyName = $state('');
-
+    // State for confirmation dialogs
     let showDeleteConfirm = $state(false);
     let showResetConfirm = $state(false);
+    
+    // State for the EditSurveyDialog
+    let showEditDialog = $state(false);
     let surveyIdToActOn: string | null = $state(null);
-    let surveyNameToActOn: string | null = $state(null);
 
-    function handleCreateSurvey() {
-        if (!newSurveyName.trim()) {
-            alert(m.survey_name_required());
-            return;
+    $effect(() => {
+        // When the edit dialog is closed (showEditDialog becomes false),
+        // reset surveyIdToActOn. This is crucial for re-initializing EditSurveyDialog
+        // if it's opened again, by ensuring its surveyIdToEdit prop changes (from null to an ID).
+        if (!showEditDialog) {
+            surveyIdToActOn = null;
         }
-        const newId = createNewSurvey(); 
-        updateSurveyDetails(newId, { name: newSurveyName.trim() });
-        goto(`/survey/${newId}/edit`); 
-        showCreateModal = false;
-        newSurveyName = '';
+    });
+
+    function initiateNewSurveyCreation() {
+        const newId = createNewSurvey(); // Assumes this creates a survey with a default/empty question
+        surveyIdToActOn = newId; // Set the ID for the dialog
+        showEditDialog = true;   // Open the dialog
     }
 
-    function handleSelectSurvey(surveyId: string) {
-        goto(`/survey/${surveyId}`);
+    function handleSelectSurvey(id: string) {
+        goto(`/survey/${id}`);
     }
 
-    function requestDeleteSurvey(surveyId: string, surveyName: string) {
+    function requestDeleteSurvey(surveyId: string) {
         surveyIdToActOn = surveyId;
-        surveyNameToActOn = surveyName;
         showDeleteConfirm = true;
     }
 
@@ -41,27 +44,25 @@
             deleteSurvey(surveyIdToActOn);
         }
         showDeleteConfirm = false;
-        surveyIdToActOn = null;
-        surveyNameToActOn = null;
+        // surveyIdToActOn will be reset by the $effect when showEditDialog is (or becomes) false.
     }
 
     function cancelDeleteSurvey() {
         showDeleteConfirm = false;
-        surveyIdToActOn = null;
-        surveyNameToActOn = null;
+        // surveyIdToActOn will be reset by the $effect.
     }
 
     function handleEditSurvey(surveyId: string) {
-        goto(`/survey/${surveyId}/edit`);
+        surveyIdToActOn = surveyId;
+        showEditDialog = true;
     }
 
     function handleViewResults(surveyId: string) {
         goto(`/survey/${surveyId}/results`);
     }
 
-    function requestResetResults(surveyId: string, surveyName: string) {
+    function requestResetResults(surveyId: string) {
         surveyIdToActOn = surveyId;
-        surveyNameToActOn = surveyName;
         showResetConfirm = true;
     }
 
@@ -70,14 +71,12 @@
             resetSurveyResults(surveyIdToActOn);
         }
         showResetConfirm = false;
-        surveyIdToActOn = null;
-        surveyNameToActOn = null;
+        // surveyIdToActOn will be reset by the $effect.
     }
 
     function cancelResetResults() {
         showResetConfirm = false;
-        surveyIdToActOn = null;
-        surveyNameToActOn = null;
+        // surveyIdToActOn will be reset by the $effect.
     }
 </script>
 
@@ -95,7 +94,7 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold text-gray-200">{m.existing_surveys_title()}</h2>
             <button
-                onclick={() => (showCreateModal = true)}
+                onclick={initiateNewSurveyCreation}
                 class="p-2 text-green-400 hover:text-green-300 transition-colors"
                 title={m.create_new_survey_title()}
             >
@@ -110,7 +109,7 @@
                 {#each $surveys as survey (survey.id)}
                     <li class="flex items-center justify-between bg-gray-700 p-4 rounded-md shadow hover:shadow-lg transition-shadow">
                         <span class="text-lg text-gray-100 truncate flex-1">
-                            {survey.name}
+                            {survey.question || (m.new_survey_name_placeholder ? m.new_survey_name_placeholder() : '(New Survey - Edit to add question)')}
                         </span>
                         <div class="flex items-center gap-2">
                             <button
@@ -135,14 +134,14 @@
                                 <Icon src={Cog6Tooth} class="w-6 h-6" />
                             </button>
                             <button
-                                onclick={() => requestResetResults(survey.id, survey.name)}
+                                onclick={() => requestResetResults(survey.id)}
                                 class="p-2 text-orange-400 hover:text-orange-300 transition-colors"
                                 title={m.reset_survey_results_title()}
                             >
                                 <Icon src={ArrowPath} class="w-6 h-6" />
                             </button>
                             <button
-                                onclick={() => requestDeleteSurvey(survey.id, survey.name)}
+                                onclick={() => requestDeleteSurvey(survey.id)}
                                 class="p-2 text-red-400 hover:text-red-300 transition-colors"
                                 title={m.delete_survey_button_title()}
                             >
@@ -155,40 +154,13 @@
         {/if}
     </section>
 
-    <!-- Create Survey Modal -->
-    {#if showCreateModal}
-        <div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-            <div class="bg-gray-700 p-6 rounded-lg shadow-xl w-full max-w-md">
-                <h3 class="text-xl font-semibold text-gray-100 mb-4">{m.create_new_survey_title()}</h3>
-                <input
-                    type="text"
-                    bind:value={newSurveyName}
-                    placeholder={m.new_survey_name_placeholder()}
-                    class="w-full p-3 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 mb-4"
-                />
-                <div class="flex justify-end gap-3">
-                    <button
-                        onclick={() => { showCreateModal = false; newSurveyName = ''; }}
-                        class="px-4 py-2 text-gray-300 bg-gray-600 hover:bg-gray-500 rounded-md transition-colors"
-                    >
-                        {m.cancel_button()}
-                    </button>
-                    <button
-                        onclick={handleCreateSurvey}
-                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md transition-colors"
-                    >
-                        {m.create_button()}
-                    </button>
-                </div>
-            </div>
-        </div>
-    {/if}
+    <!-- The old Create Survey Modal has been removed. -->
 
     <!-- Delete Confirmation Modal -->
     <ConfirmDialog
         bind:show={showDeleteConfirm}
         title={m.delete_survey_title()}
-        message={surveyNameToActOn ? m.confirm_delete_survey_message({ name: surveyNameToActOn }) : ''}
+        message={m.confirm_delete_survey_message_generic ? m.confirm_delete_survey_message_generic() : 'Are you sure you want to delete this survey?'}
         onConfirm={confirmDeleteSurvey}
         onCancel={cancelDeleteSurvey}
     />
@@ -197,8 +169,15 @@
     <ConfirmDialog
         bind:show={showResetConfirm}
         title={m.reset_survey_results_title()}
-        message={surveyNameToActOn ? m.confirm_reset_survey_results_message({ name: surveyNameToActOn }) : ''}
+        message={m.confirm_reset_survey_results_message_generic ? m.confirm_reset_survey_results_message_generic() : 'Are you sure you want to reset results for this survey?'}
         onConfirm={confirmResetResults}
         onCancel={cancelResetResults}
     />
+
+    <!-- Edit Survey Dialog -->
+    <!-- Conditionally render EditSurveyDialog: only when surveyIdToActOn is set AND showEditDialog is true. -->
+    <!-- This ensures the component is re-created/destroyed when not active, helping with re-initialization. -->
+    {#if showEditDialog && surveyIdToActOn}
+      <EditSurveyDialog bind:show={showEditDialog} surveyIdToEdit={surveyIdToActOn} />
+    {/if}
 </div>

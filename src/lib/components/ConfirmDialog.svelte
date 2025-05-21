@@ -1,42 +1,48 @@
 <script lang="ts">
-    import { m } from '$lib/paraglide/messages';
     import { fly } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
     import { tick } from 'svelte';
+    import * as m from "$lib/paraglide/messages"; // Import messages
 
-    interface ConfirmDialogProps {
-        show: boolean;
-        title?: string;
-        message: string;
-        onConfirm: () => void;
-        onCancel: () => void;
-    }
-
-    const { show, title = '', message, onConfirm, onCancel } = $props<ConfirmDialogProps>();
+    let {
+        show = $bindable(false),
+        title = '',
+        message = '',
+        onConfirm = () => {},
+        onCancel = () => {}
+    } = $props();
 
     let dialogElement: HTMLDivElement | undefined = $state();
 
     function handleConfirm() {
         onConfirm();
+        show = false;
     }
 
     function handleCancel() {
-        onCancel();
-    }
-
-    function handleDialogContentClick(event: MouseEvent) {
-        event.stopPropagation();
+        if (onCancel) {
+            onCancel();
+        }
+        show = false;
     }
 
     function handleKeydown(event: KeyboardEvent) {
         if (event.key === 'Escape') {
             handleCancel();
+        } else if (event.key === 'Enter' || event.key === ' ') {
+            // Check if the event target is the backdrop div itself
+            if (event.currentTarget === document.activeElement) {
+                handleCancel();
+                event.preventDefault(); // Prevent default spacebar (scroll) or enter behavior
+            }
         }
     }
 
     $effect(() => {
-        if (show && dialogElement) {
+        if (show) {
             tick().then(() => {
+                // Focus the dialog itself or the first focusable element (e.g., confirm button)
+                // For simplicity, focusing the dialog container which has tabindex="-1"
                 dialogElement?.focus();
             });
         }
@@ -44,37 +50,35 @@
 </script>
 
 {#if show}
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions (Backdrop click is mouse-only convenience; Escape key on dialog handles keyboard dismissal) -->
     <div
         class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-[100]"
-        onclick={handleCancel}
+        onclick={handleCancel} 
+        onkeydown={handleKeydown} 
+        role="presentation" 
+        tabindex="-1" 
         transition:fly={{ y: -50, duration: 300, easing: quintOut }}
     >
         <div
             bind:this={dialogElement}
-            class="bg-gray-700 p-6 rounded-lg shadow-2xl w-full max-w-md outline-none"
-            onclick={handleDialogContentClick}
+            class="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-xl max-w-md w-full text-neutral-900 dark:text-neutral-100"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="dialog-title"
-            aria-describedby="dialog-message"
-            tabindex="-1"
-            onkeydown={handleKeydown}
+            aria-labelledby="confirm-dialog-title"
+            aria-describedby="confirm-dialog-message" 
+            tabindex="-1" 
         >
-            {#if title}
-                <h3 id="dialog-title" class="text-xl font-semibold text-gray-100 mb-4">{title}</h3>
-            {/if}
-            <p id="dialog-message" class="text-gray-200 mb-6">{message}</p>
-            <div class="flex justify-end gap-3">
+            <h2 id="confirm-dialog-title" class="text-xl font-semibold mb-4">{title}</h2>
+            <p id="confirm-dialog-message" class="mb-6">{message}</p> 
+            <div class="flex justify-end space-x-3">
                 <button
                     onclick={handleCancel}
-                    class="px-4 py-2 text-gray-300 bg-gray-600 hover:bg-gray-500 rounded-md transition-colors"
+                    class="px-4 py-2 rounded text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-opacity-50"
                 >
                     {m.cancel_button()}
                 </button>
                 <button
                     onclick={handleConfirm}
-                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md transition-colors"
+                    class="px-4 py-2 rounded text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                 >
                     {m.confirm_button()}
                 </button>
