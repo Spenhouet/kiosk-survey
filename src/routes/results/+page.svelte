@@ -2,20 +2,20 @@
     import { surveys } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
-    import { page } from '$app/state';
+    import { page } from '$app/state'; // Assuming $app/state is correct for Svelte version
     import PillButton from '$lib/components/PillButton.svelte';
 
-    // Get surveyId from route params
-    const surveyId = $derived(page.params.surveyId);
+    // Get surveyId from query parameter 'id'
+    let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
 
-    // Find the current survey from the surveys store
-    let currentSurvey = $derived($surveys.find(s => s.id === surveyId));
+    // Find the current survey from the surveys store using surveyIdFromQuery
+    let currentSurvey = $derived(surveyIdFromQuery ? $surveys.find(s => s.id === surveyIdFromQuery) : undefined);
 
     let currentPillButtonColor = $derived.by(() => {
-        const currentSurveyId = page.params.surveyId; // Get surveyId from page store
-        if (!currentSurveyId) return '#007bff'; // Default color if no surveyId in route
-        const currentSurvey = $surveys.find(s => s.id === currentSurveyId);
-        return currentSurvey ? currentSurvey.appearance.pillButtonColor : '#007bff'; // Default if survey not found
+        const id = page.url.searchParams.get('id');
+        if (!id) return '#007bff'; // Default color if no surveyId in route
+        const surveyInstance = $surveys.find(s => s.id === id);
+        return surveyInstance ? surveyInstance.appearance.pillButtonColor : '#007bff'; // Default if survey not found
     });
 
     // Svelte 5 derived state from currentSurvey
@@ -72,8 +72,8 @@
         {/if}
 
         <PillButton
-            onClick={() => goto(`/survey/${surveyId}`)}
-            customClass="mt-8 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+            onClick={() => goto(`/survey?id=${surveyIdFromQuery}`)}
+            customClass="mt-8 px-6 py-3"
         >
             {m.repeat_survey_button()}
         </PillButton>

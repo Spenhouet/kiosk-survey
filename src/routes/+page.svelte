@@ -31,7 +31,7 @@
     }
 
     function handleSelectSurvey(id: string) {
-        goto(`/survey/${id}`);
+        goto(`/survey?id=${id}`);
     }
 
     function requestDeleteSurvey(surveyId: string) {
@@ -58,7 +58,7 @@
     }
 
     function handleViewResults(surveyId: string) {
-        goto(`/survey/${surveyId}/results`);
+        goto(`/results?id=${surveyId}`);
     }
 
     function requestResetResults(surveyId: string) {
