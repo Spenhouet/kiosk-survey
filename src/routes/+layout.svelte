@@ -11,7 +11,7 @@
 
   let currentLang = $state(getLocale());
 
-  let surveyId = $derived(page.params.surveyId);
+  let surveyId = page.url.searchParams.get('id');
   let currentSurvey = $derived(surveyId ? $surveys.find(s => s.id === surveyId) : undefined);
   let pageBackgroundColor = $derived(currentSurvey?.appearance.appBackgroundColor ?? 'initial');
 
