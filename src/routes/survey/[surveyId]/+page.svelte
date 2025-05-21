@@ -56,9 +56,8 @@
         <div class="flex flex-col gap-4">
             {#each currentSurveyAnswers as answer (answer.id)} 
                 <PillButton
-                    text={answer.text}
                     onClick={() => handleAnswer(answer.id)} 
-                />
+                >{answer.text}</PillButton>
             {/each}
         </div>
     </div>

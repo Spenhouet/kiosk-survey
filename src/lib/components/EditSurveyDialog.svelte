@@ -185,7 +185,7 @@
                     class="flex-grow min-w-0 p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                 />
                 <div class="flex-shrink-0">
-                    <PillButton text={m.add_answer_button ? m.add_answer_button() : "Add"} onClick={addAnswer} customClass="bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm" />
+                    <PillButton onClick={addAnswer} customClass="bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm">{m.add_answer_button()}</PillButton>
                 </div>
             </div>
         </section>
@@ -219,8 +219,8 @@
             </div>
         </section>
          <div class="flex justify-end gap-3 pt-6">
-            <PillButton text={m.cancel_button ? m.cancel_button() : "Cancel"} onClick={handleClose} customClass="px-4 py-2 bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" />
-            <PillButton text={m.save_button ? m.save_button() : "Save Changes"} onClick={handleSaveChanges} customClass="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500" />
+            <PillButton onClick={handleClose} customClass="px-4 py-2 bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" >{m.cancel_button()}</PillButton>
+            <PillButton onClick={handleSaveChanges} customClass="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">{ m.save_button()}</PillButton>
         </div>
     </div>
 </div>

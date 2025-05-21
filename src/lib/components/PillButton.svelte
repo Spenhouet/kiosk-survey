@@ -2,18 +2,12 @@
     import { surveys } from '$lib/stores';
     import { page } from '$app/state'; // Import page store to get surveyId from params
 
-    type Props = {
-        text: string;
-        onClick?: (event: MouseEvent) => void;
-        disabled?: boolean;
-        customClass?: string;
-    };
     let {
-        text,
+        children,
         onClick,
         disabled = false,
         customClass = ''
-    } = $props<Props>();
+    } = $props();
 
     let currentPillButtonColor = $derived.by(() => {
         const currentSurveyId = page.params.surveyId; // Get surveyId from page store
@@ -31,5 +25,5 @@
     class="{baseClasses} {customClass} text-white focus:ring-[var(--pill-bg-color)] hover:brightness-90"
     style="--pill-bg-color: {currentPillButtonColor}; background-color: var(--pill-bg-color);"
 >
-    {text}
+    {@render children()}
 </button>
