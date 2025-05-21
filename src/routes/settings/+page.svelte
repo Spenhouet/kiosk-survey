@@ -4,26 +4,31 @@
         surveyAnswers,
         appBackgroundColor,
         pillButtonColor,
-        resetResults,
-        resetSurveyToDefaults,
-        type AnswerOption
+        resetActiveSurveyResults,
+        updateActiveSurveyDetails,
+        type AnswerOption,
+        activeSurveyId, 
+        surveys
     } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
-    import { tick } from 'svelte'; // For focus management
+    import { tick } from 'svelte';
     import { Icon } from '@steeze-ui/svelte-icon';
-    import { Trash, Cog6Tooth } from '@steeze-ui/heroicons'; 
+    import { Trash, ArrowPath, PaintBrush } from '@steeze-ui/heroicons';
+    import PillButton from '$lib/components/PillButton.svelte';
+    import { get } from 'svelte/store';
 
-    // Svelte 5 state for local component logic
     let newAnswerText = $state('');
     let showConfirmClear = $state(false);
-    let showConfirmResetSurvey = $state(false);
-
-    // Svelte 5 reactive bindings:
-    // bind:value for inputs on $surveyQuestion and $appBackgroundColor is fine.
-    // For the array $surveyAnswers, we need to be careful.
-    // Direct binding like `bind:value={$surveyAnswers[i].text}` won't trigger store update.
-    // We need to explicitly call surveyAnswers.update() or create new array.
+    
+    // Reactive derivation for current survey name
+    let currentSurveyName = $derived.by(() => {
+        const activeId = get(activeSurveyId);
+        const allSurveys = get(surveys);
+        // Ensure m.settings_page_fallback_title is available or provide a hardcoded fallback
+        const fallbackTitle = m.settings_page_fallback_title ? m.settings_page_fallback_title() : "Settings";
+        return allSurveys.find(s => s.id === activeId)?.name || fallbackTitle;
+    });
 
     function addAnswer() {
         if (!newAnswerText.trim()) return;
@@ -31,146 +36,162 @@
             id: crypto.randomUUID(),
             text: newAnswerText.trim(),
         };
-        // Svelte 5: to update a store, call its update or set method
-        surveyAnswers.update(current => [...current, newAnswer]);
+        const currentAnswers = get(surveyAnswers);
+        updateActiveSurveyDetails({ answers: [...currentAnswers, newAnswer] });
         newAnswerText = '';
     }
 
     function removeAnswer(idToRemove: string) {
-        surveyAnswers.update(current => current.filter(answer => answer.id !== idToRemove));
+        const currentAnswers = get(surveyAnswers);
+        updateActiveSurveyDetails({ answers: currentAnswers.filter(answer => answer.id !== idToRemove) });
     }
 
-    function updateAnswerProperty(index: number, prop: 'text', value: string) {
-        surveyAnswers.update(currentAnswers => {
-            const newAnswers = [...currentAnswers]; // Create a new array to ensure reactivity
-            const updatedAnswer = { ...newAnswers[index] }; // Clone the specific answer
-            updatedAnswer.text = value;
-            newAnswers[index] = updatedAnswer;
-            return newAnswers;
-        });
+    function updateAnswerText(index: number, newText: string) {
+        const currentAnswers = [...get(surveyAnswers)];
+        if (currentAnswers[index]) {
+            currentAnswers[index] = { ...currentAnswers[index], text: newText };
+            updateActiveSurveyDetails({ answers: currentAnswers });
+        }
+    }
+    
+    function updateSurveyName(newName: string) {
+        if (!newName.trim()) {
+            alert(m.survey_name_required ? m.survey_name_required() : "Survey name cannot be empty.");
+            const activeId = get(activeSurveyId);
+            const allSurveys = get(surveys);
+            const originalName = allSurveys.find(s => s.id === activeId)?.name;
+            const inputEl = document.getElementById('surveyName') as HTMLInputElement;
+            if (inputEl) inputEl.value = originalName || (m.settings_page_fallback_title ? m.settings_page_fallback_title() : "Settings");
+            return;
+        }
+        updateActiveSurveyDetails({ name: newName.trim() });
     }
 
     async function confirmClearResults() {
-        resetResults();
+        resetActiveSurveyResults(); 
         showConfirmClear = false;
-        await tick(); // Wait for DOM update
-        alert(m.confirm_clear_results_message()); // This alert isn't ideal UX, consider a toast
-    }
-    async function confirmResetSurvey() {
-        resetSurveyToDefaults();
-        showConfirmResetSurvey = false;
         await tick();
-        alert(m.confirm_reset_survey_message());
+        alert(m.confirm_clear_results_message ? m.confirm_clear_results_message() : "Results cleared.");
     }
+
 </script>
 
 <svelte:head>
-    <title>{m.settings_page_title()} | {m.app_title()}</title>
+    <title>{m.edit_survey_settings_title_dynamic ? m.edit_survey_settings_title_dynamic({ name: currentSurveyName }) : `Settings for ${currentSurveyName}`} | {m.app_title ? m.app_title() : "App"}</title>
 </svelte:head>
 
-<div class="w-full max-w-2xl bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl space-y-8">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-100">{m.settings_page_title()}</h2>
-
-    <!-- Edit Question -->
+<div class="w-full max-w-2xl mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl space-y-8">
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-100 truncate pr-2">
+            {m.edit_survey_settings_title_dynamic ? m.edit_survey_settings_title_dynamic({ name: currentSurveyName }) : `Settings for ${currentSurveyName}`}
+        </h2>
+        <PillButton text={m.back_to_surveys_button ? m.back_to_surveys_button() : "All Surveys"} onClick={() => goto('/surveys')} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400 text-sm !p-2.5" />
+    </div>
+    
     <section>
-        <label for="surveyQuestion" class="block text-lg font-medium text-gray-200 mb-2">{m.edit_question_label()}</label>
+        <label for="surveyName" class="block text-lg font-medium text-gray-200 mb-2">{m.edit_survey_name_label ? m.edit_survey_name_label() : "Survey Name"}</label>
+        <input
+            id="surveyName"
+            type="text"
+            value={currentSurveyName} 
+            onblur={(e) => updateSurveyName(e.currentTarget.value)}
+            placeholder={m.edit_survey_name_placeholder ? m.edit_survey_name_placeholder() : "Enter survey name"}
+            class="w-full p-3 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
+        />
+    </section>
+
+    <section>
+        <label for="surveyQuestion" class="block text-lg font-medium text-gray-200 mb-2">{m.edit_question_label ? m.edit_question_label() : "Question"}</label>
         <textarea
             id="surveyQuestion"
-            bind:value={$surveyQuestion}
+            value={$surveyQuestion} 
+            oninput={(e) => updateActiveSurveyDetails({ question: e.currentTarget.value })}
             rows="2"
-            placeholder={m.edit_question_label()}
+            placeholder={m.edit_question_label ? m.edit_question_label() : "Enter question"}
             class="w-full p-3 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
         ></textarea>
     </section>
 
-    <!-- Edit Answer Options -->
     <section>
-        <h3 class="text-lg font-medium text-gray-200 mb-3">{m.answer_options_label()}</h3>
+        <h3 class="text-lg font-medium text-gray-200 mb-3">{m.answer_options_label ? m.answer_options_label() : "Answers"}</h3>
         <div class="space-y-3 mb-4">
             {#each $surveyAnswers as answer, i (answer.id)}
                 <div class="flex items-center gap-2 p-2 bg-gray-600 rounded">
                     <input
                         type="text"
-                        placeholder={m.option_text_placeholder()}
+                        placeholder={m.option_text_placeholder ? m.option_text_placeholder() : "Answer"}
                         value={answer.text || ''}
-                        oninput={(e) => updateAnswerProperty(i, 'text', e.currentTarget.value)}
-                        class="flex-grow p-2 bg-gray-500 border border-gray-400 rounded"
+                        oninput={(e) => updateAnswerText(i, e.currentTarget.value)}
+                        class="flex-grow p-2 bg-gray-500 border border-gray-400 rounded text-gray-100"
                     />
                     <button
                         onclick={() => removeAnswer(answer.id)}
-                        aria-label={m.remove_answer_label()}
-                        class="p-2 text-red-400 hover:text-red-300 transition-colors text-xl"
+                        aria-label={m.remove_answer_label ? m.remove_answer_label() : "Remove"}
+                        class="p-2 text-red-400 hover:text-red-300 transition-colors"
                     >
-                    <Icon src={Trash} theme='outline' class='h-5 w-5 color-gray-900'></Icon>
-                </button>
+                        <Icon src={Trash} class="w-5 h-5" />
+                    </button>
                 </div>
             {/each}
         </div>
-        <form onsubmit={addAnswer} class="flex items-center gap-2">
-            <input type="text" bind:value={newAnswerText} placeholder={m.option_text_placeholder()} required class="flex-grow p-2 bg-gray-500 border border-gray-400 rounded">
-            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow transition-colors">{m.add_option_button()}</button>
-        </form>
+        <div class="flex gap-2">
+            <input
+                type="text"
+                bind:value={newAnswerText}
+                placeholder={m.add_answer_placeholder ? m.add_answer_placeholder() : "New answer..."}
+                onkeypress={(e) => e.key === 'Enter' && addAnswer()}
+                class="flex-grow p-2 bg-gray-500 border border-gray-400 rounded text-gray-100"
+            />
+            <PillButton text={m.add_answer_button ? m.add_answer_button() : "Add"} onClick={addAnswer} customClass="bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm" />
+        </div>
     </section>
 
-    <!-- Appearance Settings -->
     <section>
-        <h3 class="text-lg font-medium text-gray-200 mb-4 flex items-center">
-            <Icon src={Cog6Tooth} theme="outline" class="h-6 w-6 mr-2 text-gray-400" />
-            {m.theme_settings_label?.() || 'Appearance'}
+        <h3 class="text-lg font-medium text-gray-200 mb-3 flex items-center">
+            <Icon src={PaintBrush} class="w-5 h-5 mr-2 text-indigo-400" />
+            {m.appearance_settings_title ? m.appearance_settings_title() : "Appearance"}
         </h3>
-        <div class="space-y-4 p-4 bg-gray-600 rounded-md">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-                <label for="bgColor" class="block text-sm font-medium text-gray-300 mb-1">{m.background_color_label()}</label>
-                <div class="flex items-center gap-3">
-                    <input type="color" id="bgColor" bind:value={$appBackgroundColor} class="w-10 h-10 rounded-md border-2 border-gray-500 cursor-pointer">
-                    <input type="text" bind:value={$appBackgroundColor} class="p-2 bg-gray-500 border border-gray-400 rounded-md text-sm font-mono w-32">
-                </div>
+                <label for="appBackgroundColor" class="block text-sm font-medium text-gray-300 mb-1">{m.background_color_label ? m.background_color_label() : "Background"}</label>
+                <input
+                    type="color"
+                    id="appBackgroundColor"
+                    value={$appBackgroundColor}
+                    oninput={(e) => updateActiveSurveyDetails({ appearance: { appBackgroundColor: e.currentTarget.value }})}
+                    class="w-full h-10 p-1 bg-gray-600 border border-gray-500 rounded-md cursor-pointer"
+                />
             </div>
             <div>
-                <label for="pillColor" class="block text-sm font-medium text-gray-300 mb-1">{m.pill_button_color_label()}</label>
-                <div class="flex items-center gap-3">
-                    <input type="color" id="pillColor" bind:value={$pillButtonColor} class="w-10 h-10 rounded-md border-2 border-gray-500 cursor-pointer">
-                    <input type="text" bind:value={$pillButtonColor} class="p-2 bg-gray-500 border border-gray-400 rounded-md text-sm font-mono w-32">
-                </div>
+                <label for="pillButtonColor" class="block text-sm font-medium text-gray-300 mb-1">{m.button_color_label ? m.button_color_label() : "Button Color"}</label>
+                <input
+                    type="color"
+                    id="pillButtonColor"
+                    value={$pillButtonColor}
+                    oninput={(e) => updateActiveSurveyDetails({ appearance: { pillButtonColor: e.currentTarget.value }})}
+                    class="w-full h-10 p-1 bg-gray-600 border border-gray-500 rounded-md cursor-pointer"
+                />
             </div>
         </div>
     </section>
 
-    <!-- Actions -->
-    <section class="space-y-4">
-        <div class="flex flex-wrap gap-3">
-            <a href={`/results`}
-               class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow transition-colors text-center">
-               {m.view_results_button()}
-            </a>
-            <button onclick={() => showConfirmClear = true}
-                    class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-md shadow transition-colors">
-                    {m.clear_results_button()}
-            </button>
-            <button onclick={() => showConfirmResetSurvey = true}
-                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md shadow transition-colors">
-                    {m.reset_survey_button()}
-            </button>
+    <section class="border-t border-gray-600 pt-6">
+        <h3 class="text-xl font-semibold text-red-500 mb-4">{m.danger_zone_title ? m.danger_zone_title() : "Danger Zone"}</h3>
+        <div class="space-y-4">
+            <div>
+                <PillButton
+                    text={m.clear_results_button ? m.clear_results_button() : "Clear Results"}
+                    onClick={() => showConfirmClear = true}
+                    customClass="w-full bg-red-700 hover:bg-red-800 focus:ring-red-600 !text-white"
+                />
+                {#if showConfirmClear}
+                    <div class="mt-3 p-3 bg-red-900 bg-opacity-75 rounded-md text-center">
+                        <p class="text-red-200 mb-3">{m.confirm_clear_results_prompt ? m.confirm_clear_results_prompt() : "Sure?"}</p>
+                        <PillButton text={m.confirm_button ? m.confirm_button() : "Confirm"} onClick={confirmClearResults} customClass="bg-red-600 hover:bg-red-700 focus:ring-red-500 !text-white mr-2 !p-2.5 text-sm" />
+                        <PillButton text={m.cancel_button ? m.cancel_button() : "Cancel"} onClick={() => showConfirmClear = false} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400 !p-2.5 text-sm" />
+                    </div>
+                {/if}
+            </div>
         </div>
-
-        {#if showConfirmClear}
-            <div class="mt-4 p-4 bg-gray-800 rounded-md border border-yellow-500">
-                <p class="text-yellow-200 mb-3">{m.confirm_clear_results_message()}</p>
-                <button onclick={confirmClearResults} class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded mr-2">{m.yes_button()}</button>
-                <button onclick={() => showConfirmClear = false} class="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded">{m.cancel_button()}</button>
-            </div>
-        {/if}
-         {#if showConfirmResetSurvey}
-            <div class="mt-4 p-4 bg-gray-800 rounded-md border border-red-500">
-                <p class="text-red-200 mb-3">{m.confirm_reset_survey_message()}</p>
-                <button onclick={confirmResetSurvey} class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded mr-2">{m.yes_button()}</button>
-                <button onclick={() => showConfirmResetSurvey = false} class="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded">{m.cancel_button()}</button>
-            </div>
-        {/if}
     </section>
-
-    <a href={`/`}
-       class="block w-full max-w-xs mx-auto mt-8 px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-full shadow-md transition-colors text-center">
-       {m.back_to_survey_button()}
-    </a>
 </div>
