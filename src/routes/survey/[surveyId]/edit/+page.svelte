@@ -184,26 +184,6 @@
             </div>
         </div>
     </section>
-
-    <section class="border-t border-gray-600 pt-6">
-        <h3 class="text-xl font-semibold text-red-500 mb-4">{m.danger_zone_title ? m.danger_zone_title() : "Danger Zone"}</h3>
-        <div class="space-y-4">
-            <div>
-                <PillButton
-                    text={m.clear_results_button ? m.clear_results_button() : "Clear Results"}
-                    onClick={() => showConfirmClear = true}
-                    customClass="w-full bg-red-700 hover:bg-red-800 focus:ring-red-600 !text-white"
-                />
-                {#if showConfirmClear}
-                    <div class="mt-3 p-3 bg-red-900 bg-opacity-75 rounded-md text-center">
-                        <p class="text-red-200 mb-3">{m.confirm_clear_results_prompt ? m.confirm_clear_results_prompt() : "Sure?"}</p>
-                        <PillButton text={m.confirm_button ? m.confirm_button() : "Confirm"} onClick={confirmClearResults} customClass="bg-red-600 hover:bg-red-700 focus:ring-red-500 !text-white mr-2 !p-2.5 text-sm" />
-                        <PillButton text={m.cancel_button ? m.cancel_button() : "Cancel"} onClick={() => showConfirmClear = false} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400 !p-2.5 text-sm" />
-                    </div>
-                {/if}
-            </div>
-        </div>
-    </section>
 </div>
 {:else}
     <p class="text-xl text-gray-400 my-8 text-center">{m.loading_survey_data ? m.loading_survey_data() : "Loading survey data..."}</p>

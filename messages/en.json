@@ -39,7 +39,6 @@
   "add_answer_placeholder": "New answer option...",
   "add_answer_button": "Add Answer",
   "appearance_settings_title": "Survey Appearance",
-  "danger_zone_title": "Danger Zone",
   "surveys_page_title": "Manage Surveys",
   "create_new_survey_title": "Create New Survey",
   "new_survey_name_placeholder": "Enter survey name...",
@@ -59,5 +58,9 @@
   "edit_survey_name_placeholder": "Enter a name for this survey",
   "survey_not_found_title": "Survey Not Found",
   "survey_not_found_message": "The survey you are looking for does not exist.",
-  "loading_survey_data": "Loading survey data..."
+  "loading_survey_data": "Loading survey data...",
+  "confirm_reset_survey_results_message": "Are you sure you want to reset the results for the survey \"{name}\"? This action cannot be undone.",
+  "view_survey_results_title": "View Survey Results",
+  "reset_survey_results_title": "Reset Survey Results",
+  "delete_survey_title": "Delete Survey"
 }
