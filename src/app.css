@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @plugin '@tailwindcss/forms';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any global custom styles or overrides here if necessary */
+body {
+    @apply bg-gray-800 text-gray-100 antialiased;
+    min-height: 100vh;
+    overflow: hidden;
+    /* Prevent scrollbars */
+    transition: background-color 0.3s ease;
+}
+
+/* Ensure full screen centering for router views */
+/* This will be handled by Tailwind classes in layouts/pages */
