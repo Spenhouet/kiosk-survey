@@ -13,8 +13,8 @@ const generateDefaultsForLanguage = (langTag: Locale): { question: string, answe
     const question = m.default_survey_question({}, { locale: langTag }); // Pass options object even if empty
 
     const answers: AnswerOption[] = [
-        { id: 'yes', text: m.yes({}, { locale: langTag }) },
-        { id: 'no', text: m.no({}, { locale: langTag }) },
+        { id: 'default_answer_option_1', text: m.default_answer_option_1({}, { locale: langTag }) },
+        { id: 'default_answer_option_2', text: m.default_answer_option_2({}, { locale: langTag }) },
     ];
     return { question, answers };
 };
