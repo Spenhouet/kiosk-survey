@@ -11,7 +11,7 @@
     import PillButton from '$lib/components/PillButton.svelte';
 
     // Props
-    let { show, surveyIdToEdit } = $props<{ show: boolean, surveyIdToEdit: string | null }>();
+    let { show = $bindable(), surveyIdToEdit } = $props<{ show: boolean, surveyIdToEdit: string | null }>();
 
     let currentSurvey = $derived(surveyIdToEdit ? $surveys.find(s => s.id === surveyIdToEdit) : undefined);
 
@@ -154,15 +154,17 @@
                     </div>
                 {/each}
             </div>
-            <div class="flex gap-2">
+            <div class="flex items-center gap-2">
                 <input
                     type="text"
                     bind:value={newAnswerText}
                     placeholder={m.add_answer_placeholder ? m.add_answer_placeholder() : "New answer..."}
                     onkeypress={(e) => { if (e.key === 'Enter') addAnswer(); }}
-                    class="flex-grow p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
+                    class="flex-grow min-w-0 p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                 />
-                <PillButton text={m.add_answer_button ? m.add_answer_button() : "Add"} onClick={addAnswer} customClass="bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm" />
+                <div class="flex-shrink-0">
+                    <PillButton text={m.add_answer_button ? m.add_answer_button() : "Add"} onClick={addAnswer} customClass="bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm" />
+                </div>
             </div>
         </section>
 
