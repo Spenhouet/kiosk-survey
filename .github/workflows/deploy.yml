@@ -18,17 +18,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1 # Changed from setup-node
         with:
-          node-version: '20' # Use a current LTS version
-          cache: 'npm'
+          bun-version: latest # Or a specific version
+          # cache: 'bun' # Caching is often handled by setup-bun automatically
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile # Changed from npm ci
 
       - name: Build
-        run: npm run build
+        run: bun run build # Changed from npm run build
         env:
           NODE_ENV: production # For svelte.config.js base path
           # PARAGLIDE_PROJECT_PATH: ./project.inlang # If Paraglide needs explicit path in CI
