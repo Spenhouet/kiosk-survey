@@ -3,7 +3,7 @@
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
     import { Icon } from '@steeze-ui/svelte-icon';
-    import { PlusCircle, Trash, PlayCircle, Cog6Tooth, ArrowPath, ChartBar } from '@steeze-ui/heroicons';
+    import { PlusCircle, Trash, PlayCircle, Pencil, ArrowPath, ChartBar } from '@steeze-ui/heroicons';
     import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
     import EditSurveyDialog from '$lib/components/EditSurveyDialog.svelte';
 
@@ -131,7 +131,7 @@
                                 class="p-2 text-blue-400 hover:text-blue-300 transition-colors"
                                 title={m.edit_survey_settings_title()} 
                             >
-                                <Icon src={Cog6Tooth} class="w-6 h-6" />
+                                <Icon src={Pencil} class="w-6 h-6" />
                             </button>
                             <button
                                 onclick={() => requestResetResults(survey.id)}
