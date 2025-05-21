@@ -1,74 +1,83 @@
 <script lang="ts">
     import {
-        surveyQuestion,
-        surveyAnswers,
-        appBackgroundColor,
-        pillButtonColor,
-        resetActiveSurveyResults,
-        updateActiveSurveyDetails,
-        type AnswerOption,
-        activeSurveyId, 
-        surveys
+        surveys,
+        updateSurveyDetails,
+        resetSurveyResults,
+        type AnswerOption
     } from '$lib/stores';
+    import { page } from '$app/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
     import { tick } from 'svelte';
     import { Icon } from '@steeze-ui/svelte-icon';
     import { Trash, ArrowPath, PaintBrush } from '@steeze-ui/heroicons';
     import PillButton from '$lib/components/PillButton.svelte';
-    import { get } from 'svelte/store';
+
+    let surveyId = $derived($page.params.surveyId);
+    let currentSurvey = $derived($surveys.find(s => s.id === surveyId));
 
     let newAnswerText = $state('');
     let showConfirmClear = $state(false);
     
-    // Reactive derivation for current survey name
-    let currentSurveyName = $derived.by(() => {
-        const activeId = get(activeSurveyId);
-        const allSurveys = get(surveys);
-        // Ensure m.settings_page_fallback_title is available or provide a hardcoded fallback
-        const fallbackTitle = m.settings_page_fallback_title ? m.settings_page_fallback_title() : "Settings";
-        return allSurveys.find(s => s.id === activeId)?.name || fallbackTitle;
-    });
+    let currentSurveyName = $derived(currentSurvey?.name || (m.settings_page_fallback_title ? m.settings_page_fallback_title() : "Settings"));
+    let currentSurveyQuestion = $derived(currentSurvey?.question || '');
+    let currentSurveyAnswers = $derived(currentSurvey?.answers || []);
+    let currentAppBackgroundColor = $derived(currentSurvey?.appearance.appBackgroundColor || '#282c34');
+    let currentPillButtonColor = $derived(currentSurvey?.appearance.pillButtonColor || '#007bff');
 
     function addAnswer() {
-        if (!newAnswerText.trim()) return;
+        if (!newAnswerText.trim() || !currentSurvey) return;
         const newAnswer: AnswerOption = {
             id: crypto.randomUUID(),
             text: newAnswerText.trim(),
         };
-        const currentAnswers = get(surveyAnswers);
-        updateActiveSurveyDetails({ answers: [...currentAnswers, newAnswer] });
+        updateSurveyDetails(surveyId, { answers: [...currentSurveyAnswers, newAnswer] });
         newAnswerText = '';
     }
 
     function removeAnswer(idToRemove: string) {
-        const currentAnswers = get(surveyAnswers);
-        updateActiveSurveyDetails({ answers: currentAnswers.filter(answer => answer.id !== idToRemove) });
+        if (!currentSurvey) return;
+        updateSurveyDetails(surveyId, { answers: currentSurveyAnswers.filter(answer => answer.id !== idToRemove) });
     }
 
     function updateAnswerText(index: number, newText: string) {
-        const currentAnswers = [...get(surveyAnswers)];
-        if (currentAnswers[index]) {
-            currentAnswers[index] = { ...currentAnswers[index], text: newText };
-            updateActiveSurveyDetails({ answers: currentAnswers });
+        if (!currentSurvey) return;
+        const updatedAnswers = [...currentSurveyAnswers];
+        if (updatedAnswers[index]) {
+            updatedAnswers[index] = { ...updatedAnswers[index], text: newText };
+            updateSurveyDetails(surveyId, { answers: updatedAnswers });
         }
     }
     
-    function updateSurveyName(newName: string) {
+    function handleSurveyNameBlur(event: FocusEvent) {
+        const newName = (event.currentTarget as HTMLInputElement).value;
+        if (!currentSurvey) return;
         if (!newName.trim()) {
             alert(m.survey_name_required ? m.survey_name_required() : "Survey name cannot be empty.");
-            const activeId = get(activeSurveyId);
-            const allSurveys = get(surveys);
-            const originalName = allSurveys.find(s => s.id === activeId)?.name;
-            const inputEl = document.getElementById('surveyName') as HTMLInputElement;
-            if (inputEl) inputEl.value = originalName || (m.settings_page_fallback_title ? m.settings_page_fallback_title() : "Settings");
+            (event.currentTarget as HTMLInputElement).value = currentSurveyName; 
             return;
         }
-        updateActiveSurveyDetails({ name: newName.trim() });
+        updateSurveyDetails(surveyId, { name: newName.trim() });
+    }
+
+    function handleQuestionInput(event: Event) {
+        if (!currentSurvey) return;
+        updateSurveyDetails(surveyId, { question: (event.currentTarget as HTMLTextAreaElement).value });
+    }
+
+    function handleAppBackgroundColorInput(event: Event) {
+        if (!currentSurvey) return;
+        updateSurveyDetails(surveyId, { appearance: { ...currentSurvey.appearance, appBackgroundColor: (event.currentTarget as HTMLInputElement).value }});
+    }
+
+    function handlePillButtonColorInput(event: Event) {
+        if (!currentSurvey) return;
+        updateSurveyDetails(surveyId, { appearance: { ...currentSurvey.appearance, pillButtonColor: (event.currentTarget as HTMLInputElement).value }});
     }
 
     async function confirmClearResults() {
-        resetActiveSurveyResults(); 
+        if (!currentSurvey) return;
+        resetSurveyResults(surveyId); 
         showConfirmClear = false;
         await tick();
         alert(m.confirm_clear_results_message ? m.confirm_clear_results_message() : "Results cleared.");
@@ -80,12 +89,13 @@
     <title>{m.edit_survey_settings_title_dynamic ? m.edit_survey_settings_title_dynamic({ name: currentSurveyName }) : `Settings for ${currentSurveyName}`} | {m.app_title ? m.app_title() : "App"}</title>
 </svelte:head>
 
+{#if currentSurvey}
 <div class="w-full max-w-2xl mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl space-y-8">
     <div class="flex justify-between items-center">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-100 truncate pr-2">
             {m.edit_survey_settings_title_dynamic ? m.edit_survey_settings_title_dynamic({ name: currentSurveyName }) : `Settings for ${currentSurveyName}`}
         </h2>
-        <PillButton text={m.back_to_surveys_button ? m.back_to_surveys_button() : "All Surveys"} onClick={() => goto('/surveys')} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400 text-sm !p-2.5" />
+        <PillButton text={m.back_to_surveys_button ? m.back_to_surveys_button() : "All Surveys"} onClick={() => goto('/')} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400 text-sm !p-2.5" />
     </div>
     
     <section>
@@ -94,7 +104,7 @@
             id="surveyName"
             type="text"
             value={currentSurveyName} 
-            onblur={(e) => updateSurveyName(e.currentTarget.value)}
+            onblur={handleSurveyNameBlur}
             placeholder={m.edit_survey_name_placeholder ? m.edit_survey_name_placeholder() : "Enter survey name"}
             class="w-full p-3 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
         />
@@ -104,8 +114,8 @@
         <label for="surveyQuestion" class="block text-lg font-medium text-gray-200 mb-2">{m.edit_question_label ? m.edit_question_label() : "Question"}</label>
         <textarea
             id="surveyQuestion"
-            value={$surveyQuestion} 
-            oninput={(e) => updateActiveSurveyDetails({ question: e.currentTarget.value })}
+            value={currentSurveyQuestion} 
+            oninput={handleQuestionInput}
             rows="2"
             placeholder={m.edit_question_label ? m.edit_question_label() : "Enter question"}
             class="w-full p-3 bg-gray-600 border border-gray-500 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
@@ -115,13 +125,13 @@
     <section>
         <h3 class="text-lg font-medium text-gray-200 mb-3">{m.answer_options_label ? m.answer_options_label() : "Answers"}</h3>
         <div class="space-y-3 mb-4">
-            {#each $surveyAnswers as answer, i (answer.id)}
+            {#each currentSurveyAnswers as answer, i (answer.id)}
                 <div class="flex items-center gap-2 p-2 bg-gray-600 rounded">
                     <input
                         type="text"
                         placeholder={m.option_text_placeholder ? m.option_text_placeholder() : "Answer"}
                         value={answer.text || ''}
-                        oninput={(e) => updateAnswerText(i, e.currentTarget.value)}
+                        oninput={(e) => updateAnswerText(i, (e.currentTarget as HTMLInputElement).value)}
                         class="flex-grow p-2 bg-gray-500 border border-gray-400 rounded text-gray-100"
                     />
                     <button
@@ -157,8 +167,8 @@
                 <input
                     type="color"
                     id="appBackgroundColor"
-                    value={$appBackgroundColor}
-                    oninput={(e) => updateActiveSurveyDetails({ appearance: { appBackgroundColor: e.currentTarget.value }})}
+                    value={currentAppBackgroundColor}
+                    oninput={handleAppBackgroundColorInput}
                     class="w-full h-10 p-1 bg-gray-600 border border-gray-500 rounded-md cursor-pointer"
                 />
             </div>
@@ -167,8 +177,8 @@
                 <input
                     type="color"
                     id="pillButtonColor"
-                    value={$pillButtonColor}
-                    oninput={(e) => updateActiveSurveyDetails({ appearance: { pillButtonColor: e.currentTarget.value }})}
+                    value={currentPillButtonColor}
+                    oninput={handlePillButtonColorInput}
                     class="w-full h-10 p-1 bg-gray-600 border border-gray-500 rounded-md cursor-pointer"
                 />
             </div>
@@ -195,3 +205,6 @@
         </div>
     </section>
 </div>
+{:else}
+    <p class="text-xl text-gray-400 my-8 text-center">{m.loading_survey_data ? m.loading_survey_data() : "Loading survey data..."}</p>
+{/if}
