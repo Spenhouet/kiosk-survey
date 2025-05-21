@@ -15,28 +15,25 @@ export interface SurveyAppearance {
 
 export interface Survey {
     id: string;
-    name: string;
     question: string;
     answers: AnswerOption[];
     results: Record<string, number>;
     appearance: SurveyAppearance;
 }
 
-const generateDefaultsForLanguage = (langTag: Locale): { name: string, question: string, answers: AnswerOption[] } => {
-    const name = m.default_survey_name({}, { locale: langTag });
+const generateDefaultsForLanguage = (langTag: Locale): { question: string, answers: AnswerOption[] } => {
     const question = m.default_survey_question({}, { locale: langTag });
     const answers: AnswerOption[] = [
         { id: 'default_answer_option_1', text: m.default_answer_option_1({}, { locale: langTag }) },
         { id: 'default_answer_option_2', text: m.default_answer_option_2({}, { locale: langTag }) },
     ];
-    return { name, question, answers };
+    return { question, answers };
 };
 
 const createDefaultSurvey = (): Survey => {
     const defaults = generateDefaultsForLanguage(getCurrentLocale());
     return {
         id: crypto.randomUUID(),
-        name: defaults.name,
         question: defaults.question,
         answers: defaults.answers,
         results: {},
@@ -66,7 +63,6 @@ export function updateSurveyDetails(surveyId: string, details: Partial<Omit<Surv
                 const updatedSurvey = { ...survey };
                 if (details.question !== undefined) updatedSurvey.question = details.question;
                 if (details.answers !== undefined) updatedSurvey.answers = details.answers;
-                if (details.name !== undefined) updatedSurvey.name = details.name;
                 if (details.appearance) {
                     updatedSurvey.appearance = { ...survey.appearance, ...details.appearance };
                 }
