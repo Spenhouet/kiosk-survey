@@ -62,5 +62,6 @@
   "confirm_reset_survey_results_message": "Are you sure you want to reset the results for the survey \"{name}\"? This action cannot be undone.",
   "view_survey_results_title": "View Survey Results",
   "reset_survey_results_title": "Reset Survey Results",
-  "delete_survey_title": "Delete Survey"
+  "delete_survey_title": "Delete Survey",
+  "navigate_home_aria_label": "Navigate to survey overview"
 }

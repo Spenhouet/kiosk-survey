@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { page } from '$app/state';
+    import { page } from '$app/state'; 
     import { surveys, recordAnswer } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from '$lib/paraglide/messages';

@@ -41,7 +41,6 @@
   "appearance_settings_title": "Umfrage-Erscheinungsbild",
   "surveys_page_title": "Umfragen verwalten",
   "create_new_survey_title": "Neue Umfrage erstellen",
-  "new_survey_name_placeholder": "Umfragenamen eingeben...",
   "create_button": "Erstellen",
   "existing_surveys_title": "Deine Umfragen",
   "no_surveys_yet": "Noch keine Umfragen erstellt. Füge eine hinzu, um zu starten!",
@@ -62,5 +61,6 @@
   "confirm_reset_survey_results_message": "Sind Sie sicher, dass Sie die Ergebnisse für die Umfrage \"{name}\" zurücksetzen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
   "view_survey_results_title": "Umfrageergebnisse anzeigen",
   "reset_survey_results_title": "Umfrageergebnisse zurücksetzen",
-  "delete_survey_title": "Umfrage löschen"
+  "delete_survey_title": "Umfrage löschen",
+  "new_survey_name_placeholder": "Umfragenamen eingeben..."
 }
