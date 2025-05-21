@@ -3,6 +3,7 @@
     import { quintOut } from 'svelte/easing';
     import { tick } from 'svelte';
     import * as m from "$lib/paraglide/messages"; // Import messages
+    import PillButton from './PillButton.svelte';
 
     let {
         show = $bindable(false),
@@ -70,18 +71,18 @@
             <h2 id="confirm-dialog-title" class="text-xl font-semibold mb-4">{title}</h2>
             <p id="confirm-dialog-message" class="mb-6">{message}</p> 
             <div class="flex justify-end space-x-3">
-                <button
-                    onclick={handleCancel}
-                    class="px-4 py-2 rounded text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-opacity-50"
+                <PillButton
+                    onClick={handleCancel}
+                    customClass="px-4 py-2 rounded text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-opacity-50"
                 >
                     {m.cancel_button()}
-                </button>
-                <button
-                    onclick={handleConfirm}
-                    class="px-4 py-2 rounded text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                </PillButton>
+                <PillButton
+                    onClick={handleConfirm}
+                    customClass="px-4 py-2 rounded text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                 >
                     {m.confirm_button()}
-                </button>
+                </PillButton>
             </div>
         </div>
     </div>
