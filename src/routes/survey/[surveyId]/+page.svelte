@@ -44,7 +44,7 @@
 </script>
 
 <svelte:head>
-    <title>{survey ? survey.name : m.survey_not_found_title()} | {m.app_title()}</title>
+    <title>{survey ? survey.question : m.survey_not_found_title()} | {m.app_title()}</title>
 </svelte:head>
 
 {#if survey}
@@ -53,10 +53,11 @@
             {currentSurveyQuestion}
         </h1>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
             {#each currentSurveyAnswers as answer (answer.id)} 
                 <PillButton
                     onClick={() => handleAnswer(answer.id)} 
+                    customClass="flex-grow px-6 min-w-30"
                 >{answer.text}</PillButton>
             {/each}
         </div>
