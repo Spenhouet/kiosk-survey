@@ -7,7 +7,7 @@
     import { m } from "$lib/paraglide/messages.js";
     import { tick } from 'svelte';
     import { Icon } from '@steeze-ui/svelte-icon';
-    import { Trash, PaintBrush } from '@steeze-ui/heroicons';
+    import { Trash, PaintBrush, XMark  } from '@steeze-ui/heroicons';
     import PillButton from '$lib/components/PillButton.svelte';
 
     // Props
@@ -128,9 +128,7 @@
             aria-label={m.cancel_button ? m.cancel_button() : 'Close dialog'}
             class="absolute top-3 right-3 text-gray-400 hover:text-gray-200 transition-colors p-1"
         >
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6' aria-hidden="true">
-                <path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12' />
-            </svg>
+            <Icon src={XMark} class="w-6 h-6" />
         </button>
         <div class="flex justify-between items-center mb-6">
             <h2 id={dialogTitleId} class="text-2xl sm:text-3xl font-bold text-gray-100 truncate pr-2">
@@ -221,8 +219,8 @@
             </div>
         </section>
          <div class="flex justify-end gap-3 pt-6">
-            <PillButton text={m.cancel_button ? m.cancel_button() : "Cancel"} onClick={handleClose} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" />
-            <PillButton text={m.save_button ? m.save_button() : "Save Changes"} onClick={handleSaveChanges} customClass="bg-blue-600 hover:bg-blue-700 focus:ring-blue-500" />
+            <PillButton text={m.cancel_button ? m.cancel_button() : "Cancel"} onClick={handleClose} customClass="px-4 py-2 bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" />
+            <PillButton text={m.save_button ? m.save_button() : "Save Changes"} onClick={handleSaveChanges} customClass="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500" />
         </div>
     </div>
 </div>
