@@ -11,9 +11,13 @@
 
   let currentLang = $state(getLocale());
 
+  let surveyId = $derived(page.params.surveyId);
+  let currentSurvey = $derived(surveyId ? $surveys.find(s => s.id === surveyId) : undefined);
+  let pageBackgroundColor = $derived(currentSurvey?.appearance.appBackgroundColor ?? 'initial');
+
 </script>
 
-<div class="min-h-screen w-screen flex flex-col items-center justify-center relative p-4 sm:p-8">
+<div class="min-h-screen w-screen flex flex-col items-center justify-center relative p-4 sm:p-8" style="background-color: {pageBackgroundColor};">
   
   <!-- Top Controls: Overview Icon Left, Language Switcher Right -->
   <div class="absolute top-4 left-0 w-full flex justify-between items-center px-4 sm:top-6 z-10">
