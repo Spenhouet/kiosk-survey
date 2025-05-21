@@ -2,6 +2,7 @@
     import { surveyQuestion, surveyAnswers, recordAnswer, type AnswerOption } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
+    import PillButton from '$lib/components/PillButton.svelte'; // Import PillButton
 
     function handleAnswer(answerId: string) {
         recordAnswer(answerId);
@@ -21,12 +22,10 @@
 
     <div class="flex flex-col gap-4">
         {#each $surveyAnswers as answer (answer.id)}
-            <button
-                on:click={() => handleAnswer(answer.id)}
-                class="w-full p-3 sm:p-4 text-lg rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-150 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-            >
-                {answer.text}
-            </button>
+            <PillButton
+                text={answer.text}
+                onClick={() => handleAnswer(answer.id)}
+            />
         {/each}
     </div>
 </div>

@@ -3,6 +3,7 @@
         surveyQuestion,
         surveyAnswers,
         appBackgroundColor,
+        pillButtonColor,
         resetResults,
         resetSurveyToDefaults,
         type AnswerOption
@@ -10,8 +11,8 @@
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
     import { tick } from 'svelte'; // For focus management
-    import {Icon} from '@steeze-ui/svelte-icon'
-    import { Trash } from '@steeze-ui/heroicons'
+    import { Icon } from '@steeze-ui/svelte-icon';
+    import { Trash, Cog6Tooth } from '@steeze-ui/heroicons'; 
 
     // Svelte 5 state for local component logic
     let newAnswerText = $state('');
@@ -111,18 +112,32 @@
         </form>
     </section>
 
-    <!-- Background Color -->
+    <!-- Appearance Settings -->
     <section>
-        <label for="bgColor" class="block text-lg font-medium text-gray-200 mb-2">{m.background_color_label()}</label>
-        <div class="flex items-center gap-3">
-            <input type="color" id="bgColor" bind:value={$appBackgroundColor} class="w-12 h-12 rounded-full border-2 border-gray-500 cursor-pointer">
-            <span class="p-2 bg-gray-600 rounded-md text-sm font-mono">{$appBackgroundColor}</span>
+        <h3 class="text-lg font-medium text-gray-200 mb-4 flex items-center">
+            <Icon src={Cog6Tooth} theme="outline" class="h-6 w-6 mr-2 text-gray-400" />
+            {m.theme_settings_label?.() || 'Appearance'}
+        </h3>
+        <div class="space-y-4 p-4 bg-gray-600 rounded-md">
+            <div>
+                <label for="bgColor" class="block text-sm font-medium text-gray-300 mb-1">{m.background_color_label()}</label>
+                <div class="flex items-center gap-3">
+                    <input type="color" id="bgColor" bind:value={$appBackgroundColor} class="w-10 h-10 rounded-md border-2 border-gray-500 cursor-pointer">
+                    <input type="text" bind:value={$appBackgroundColor} class="p-2 bg-gray-500 border border-gray-400 rounded-md text-sm font-mono w-32">
+                </div>
+            </div>
+            <div>
+                <label for="pillColor" class="block text-sm font-medium text-gray-300 mb-1">{m.pill_button_color_label()}</label>
+                <div class="flex items-center gap-3">
+                    <input type="color" id="pillColor" bind:value={$pillButtonColor} class="w-10 h-10 rounded-md border-2 border-gray-500 cursor-pointer">
+                    <input type="text" bind:value={$pillButtonColor} class="p-2 bg-gray-500 border border-gray-400 rounded-md text-sm font-mono w-32">
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Actions -->
     <section class="space-y-4">
-        <!-- <h3 class="text-lg font-medium text-gray-200 mb-2">{m.actions_label?.() || 'Actions'}</h3> {/* Optional chaining for new key */} -->
         <div class="flex flex-wrap gap-3">
             <a href={`/results`}
                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow transition-colors text-center">
