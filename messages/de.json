@@ -39,7 +39,6 @@
   "add_answer_placeholder": "Neue Antwortoption...",
   "add_answer_button": "Antwort hinzufügen",
   "appearance_settings_title": "Umfrage-Erscheinungsbild",
-  "danger_zone_title": "Gefahrenzone",
   "surveys_page_title": "Umfragen verwalten",
   "create_new_survey_title": "Neue Umfrage erstellen",
   "new_survey_name_placeholder": "Umfragenamen eingeben...",
@@ -59,5 +58,9 @@
   "edit_survey_name_placeholder": "Gib einen Namen für diese Umfrage ein",
   "survey_not_found_title": "Umfrage nicht gefunden",
   "survey_not_found_message": "Die gesuchte Umfrage existiert nicht.",
-  "loading_survey_data": "Lade Umfragedaten..."
+  "loading_survey_data": "Lade Umfragedaten...",
+  "confirm_reset_survey_results_message": "Sind Sie sicher, dass Sie die Ergebnisse für die Umfrage \"{name}\" zurücksetzen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "view_survey_results_title": "Umfrageergebnisse anzeigen",
+  "reset_survey_results_title": "Umfrageergebnisse zurücksetzen",
+  "delete_survey_title": "Umfrage löschen"
 }

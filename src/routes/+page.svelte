@@ -1,12 +1,18 @@
 <script lang="ts">
-    import { surveys, createNewSurvey, deleteSurvey, updateSurveyDetails } from '$lib/stores';
+    import { surveys, createNewSurvey, deleteSurvey, updateSurveyDetails, resetSurveyResults } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from '$lib/paraglide/messages';
     import { Icon } from '@steeze-ui/svelte-icon';
-    import { PlusCircle, Trash, PlayCircle, Cog6Tooth } from '@steeze-ui/heroicons';
+    import { PlusCircle, Trash, PlayCircle, Cog6Tooth, ArrowPath, ChartBar } from '@steeze-ui/heroicons';
+    import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 
     let showCreateModal = $state(false);
     let newSurveyName = $state('');
+
+    let showDeleteConfirm = $state(false);
+    let showResetConfirm = $state(false);
+    let surveyIdToActOn: string | null = $state(null);
+    let surveyNameToActOn: string | null = $state(null);
 
     function handleCreateSurvey() {
         if (!newSurveyName.trim()) {
@@ -24,14 +30,54 @@
         goto(`/survey/${surveyId}`);
     }
 
-    function handleDeleteSurvey(surveyId: string, surveyName: string) {
-        if (confirm(m.confirm_delete_survey_message({ name: surveyName }))) {
-            deleteSurvey(surveyId);
+    function requestDeleteSurvey(surveyId: string, surveyName: string) {
+        surveyIdToActOn = surveyId;
+        surveyNameToActOn = surveyName;
+        showDeleteConfirm = true;
+    }
+
+    function confirmDeleteSurvey() {
+        if (surveyIdToActOn) {
+            deleteSurvey(surveyIdToActOn);
         }
+        showDeleteConfirm = false;
+        surveyIdToActOn = null;
+        surveyNameToActOn = null;
+    }
+
+    function cancelDeleteSurvey() {
+        showDeleteConfirm = false;
+        surveyIdToActOn = null;
+        surveyNameToActOn = null;
     }
 
     function handleEditSurvey(surveyId: string) {
         goto(`/survey/${surveyId}/edit`);
+    }
+
+    function handleViewResults(surveyId: string) {
+        goto(`/survey/${surveyId}/results`);
+    }
+
+    function requestResetResults(surveyId: string, surveyName: string) {
+        surveyIdToActOn = surveyId;
+        surveyNameToActOn = surveyName;
+        showResetConfirm = true;
+    }
+
+    function confirmResetResults() {
+        if (surveyIdToActOn) {
+            resetSurveyResults(surveyIdToActOn);
+        }
+        showResetConfirm = false;
+        surveyIdToActOn = null;
+        surveyNameToActOn = null;
+    }
+
+    function cancelResetResults() {
+        showResetConfirm = false;
+        surveyIdToActOn = null;
+        surveyNameToActOn = null;
     }
 </script>
 
@@ -39,7 +85,7 @@
     <title>{m.surveys_page_title()} | {m.app_title()}</title>
 </svelte:head>
 
-<div class="w-full max-w-3xl mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl space-y-6">
+<div class="w-full max-w-3xl mx-auto p-6 sm:p-8 space-y-6">
     <div class="flex justify-between items-center">
         <h1 class="text-3xl sm:text-4xl font-bold text-gray-100">{m.surveys_page_title()}</h1>
     </div>
@@ -74,7 +120,14 @@
                             >
                                 <Icon src={PlayCircle} class="w-6 h-6" />
                             </button>
-                             <button
+                            <button
+                                onclick={() => handleViewResults(survey.id)}
+                                class="p-2 text-yellow-400 hover:text-yellow-300 transition-colors"
+                                title={m.view_survey_results_title()}
+                            >
+                                <Icon src={ChartBar} class="w-6 h-6" />
+                            </button>
+                            <button
                                 onclick={() => handleEditSurvey(survey.id)} 
                                 class="p-2 text-blue-400 hover:text-blue-300 transition-colors"
                                 title={m.edit_survey_settings_title()} 
@@ -82,7 +135,14 @@
                                 <Icon src={Cog6Tooth} class="w-6 h-6" />
                             </button>
                             <button
-                                onclick={() => handleDeleteSurvey(survey.id, survey.name)}
+                                onclick={() => requestResetResults(survey.id, survey.name)}
+                                class="p-2 text-orange-400 hover:text-orange-300 transition-colors"
+                                title={m.reset_survey_results_title()}
+                            >
+                                <Icon src={ArrowPath} class="w-6 h-6" />
+                            </button>
+                            <button
+                                onclick={() => requestDeleteSurvey(survey.id, survey.name)}
                                 class="p-2 text-red-400 hover:text-red-300 transition-colors"
                                 title={m.delete_survey_button_title()}
                             >
@@ -123,4 +183,22 @@
             </div>
         </div>
     {/if}
+
+    <!-- Delete Confirmation Modal -->
+    <ConfirmDialog
+        bind:show={showDeleteConfirm}
+        title={m.delete_survey_title()}
+        message={surveyNameToActOn ? m.confirm_delete_survey_message({ name: surveyNameToActOn }) : ''}
+        onConfirm={confirmDeleteSurvey}
+        onCancel={cancelDeleteSurvey}
+    />
+
+    <!-- Reset Confirmation Modal -->
+    <ConfirmDialog
+        bind:show={showResetConfirm}
+        title={m.reset_survey_results_title()}
+        message={surveyNameToActOn ? m.confirm_reset_survey_results_message({ name: surveyNameToActOn }) : ''}
+        onConfirm={confirmResetResults}
+        onCancel={cancelResetResults}
+    />
 </div>
