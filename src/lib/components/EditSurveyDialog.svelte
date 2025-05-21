@@ -85,6 +85,23 @@
     function handleDialogKeyDown(event: KeyboardEvent) {
         if (event.key === 'Escape') {
             handleClose();
+        } else if (event.key === 'Enter') {
+            const targetElement = event.target as HTMLElement;
+
+            // If Enter is pressed in a TEXTAREA, allow default behavior (newline) and don't save.
+            if (targetElement && targetElement.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // If Enter is pressed in the "new answer" input, its onkeypress handler
+            // will call addAnswer() and then handleSaveChanges().
+            // So, we return here to avoid calling handleSaveChanges() again.
+            if (targetElement && targetElement.id === 'newAnswerInput') {
+                return;
+            }
+            
+            // For other cases (e.g., Enter on existing answer input, button, or dialog itself), save.
+            handleSaveChanges();
         }
     }
 
@@ -156,10 +173,17 @@
             </div>
             <div class="flex items-center gap-2">
                 <input
+                    id="newAnswerInput"
                     type="text"
                     bind:value={newAnswerText}
                     placeholder={m.add_answer_placeholder ? m.add_answer_placeholder() : "New answer..."}
-                    onkeypress={(e) => { if (e.key === 'Enter') addAnswer(); }}
+                    onkeypress={(e) => { 
+                        if (e.key === 'Enter') { 
+                            e.preventDefault(); // Prevent any default action like form submission
+                            addAnswer(); 
+                            handleSaveChanges(); // Save after adding the answer
+                        } 
+                    }}
                     class="flex-grow min-w-0 p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
                 />
                 <div class="flex-shrink-0">
@@ -198,7 +222,7 @@
         </section>
          <div class="flex justify-end gap-3 pt-6">
             <PillButton text={m.cancel_button ? m.cancel_button() : "Cancel"} onClick={handleClose} customClass="bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" />
-            <PillButton text={m.confirm_button ? m.confirm_button() : "Save Changes"} onClick={handleSaveChanges} customClass="bg-blue-600 hover:bg-blue-700 focus:ring-blue-500" />
+            <PillButton text={m.save_button ? m.save_button() : "Save Changes"} onClick={handleSaveChanges} customClass="bg-blue-600 hover:bg-blue-700 focus:ring-blue-500" />
         </div>
     </div>
 </div>
