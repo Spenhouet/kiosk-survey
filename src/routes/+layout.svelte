@@ -6,6 +6,7 @@
   import {Icon} from '@steeze-ui/svelte-icon';
   import { ListBullet } from '@steeze-ui/heroicons';
   import { surveys } from '$lib/stores';
+  import { resolveRoute } from '$app/paths';
 
   let { children } = $props();
 
@@ -23,8 +24,8 @@
   <div class="absolute top-4 left-0 w-full flex justify-between items-center px-4 sm:top-6 z-10">
   <!-- Overview Icon (Left) -->
   <div>
-    {#if page.url.pathname !== '/'}
-    <a href="/" aria-label={m.navigate_home_aria_label() ? m.navigate_home_aria_label() : 'Manage Surveys'} class="text-2xl sm:text-3xl text-gray-300 hover:text-white transition-colors flex items-center">
+    {#if page.url.pathname !== resolveRoute('/', {})}
+    <a href={resolveRoute('/', {})} aria-label={m.navigate_home_aria_label() ? m.navigate_home_aria_label() : 'Manage Surveys'} class="text-2xl sm:text-3xl text-gray-300 hover:text-white transition-colors flex items-center">
     <Icon src={ListBullet} theme='outline' class='h-7 w-7 sm:h-8 sm:w-8' />
     </a>
     {/if}

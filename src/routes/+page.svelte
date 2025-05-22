@@ -6,6 +6,8 @@
     import { PlusCircle, Trash, PlayCircle, Pencil, ArrowPath, ChartBar } from '@steeze-ui/heroicons';
     import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
     import EditSurveyDialog from '$lib/components/EditSurveyDialog.svelte';
+    import { resolveRoute } from '$app/paths';
+
 
     // State for confirmation dialogs
     let showDeleteConfirm = $state(false);
@@ -31,7 +33,7 @@
     }
 
     function handleSelectSurvey(id: string) {
-        goto(`/survey?id=${id}`);
+        goto(resolveRoute(`/survey?id=${id}`, {}));
     }
 
     function requestDeleteSurvey(surveyId: string) {
@@ -58,7 +60,7 @@
     }
 
     function handleViewResults(surveyId: string) {
-        goto(`/results?id=${surveyId}`);
+        goto(resolveRoute(`/results?id=${surveyId}`, {}));
     }
 
     function requestResetResults(surveyId: string) {

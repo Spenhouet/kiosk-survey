@@ -5,6 +5,7 @@
     import { goto } from '$app/navigation';
     import { m } from '$lib/paraglide/messages';
     import PillButton from '$lib/components/PillButton.svelte';
+    import { resolveRoute } from '$app/paths';
 
     // Get surveyId from query parameter 'id'
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
@@ -23,7 +24,7 @@
             const timeoutId = setTimeout(() => {
                 if (page.url.searchParams.get('id') === currentIdParam && !survey) {
                     alert(m.survey_not_found_message());
-                    goto('/');
+                    goto(resolveRoute('/', {}));
                 }
             }, 250);
 
@@ -31,7 +32,7 @@
         } else {
             // If no 'id' query parameter, it's an invalid state for this page.
             alert(m.survey_not_found_message()); // Or a more specific "Survey ID missing" message
-            goto('/');
+            goto(resolveRoute('/', {}));
         }
     });
 
@@ -41,7 +42,7 @@
 
         recordAnswer(currentSurveyId, answerId);
         // Navigate to results page using query parameter
-        goto(`/results?id=${currentSurveyId}`);
+        goto(resolveRoute(`/results?id=${currentSurveyId}`, {}));
     }
 </script>
 

@@ -4,6 +4,8 @@
     import { m } from "$lib/paraglide/messages.js";
     import { page } from '$app/state'; // Assuming $app/state is correct for Svelte version
     import PillButton from '$lib/components/PillButton.svelte';
+    import { resolveRoute } from '$app/paths';
+
 
     // Get surveyId from query parameter 'id'
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
@@ -72,7 +74,7 @@
         {/if}
 
         <PillButton
-            onClick={() => goto(`/survey?id=${surveyIdFromQuery}`)}
+            onClick={() => goto(resolveRoute(`/survey?id=${surveyIdFromQuery}`, {}))}
             customClass="mt-8 px-6 py-3"
         >
             {m.repeat_survey_button()}
