@@ -72,5 +72,6 @@
   "theme_switcher_to_light_aria_label": "Switch to light mode",
   "theme_switcher_to_dark_aria_label": "Switch to dark mode",
   "select_language_placeholder": "Select Language",
-  "close_button": "Close"
+  "close_button": "Close",
+  "save_changes_button": "Save Changes"
 }

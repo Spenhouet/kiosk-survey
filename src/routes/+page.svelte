@@ -12,16 +12,15 @@
     // State for confirmation dialogs
     let showDeleteConfirm = $state(false);
     let showResetConfirm = $state(false);
-    
-    // State for the EditSurveyDialog
     let showEditDialog = $state(false);
+    
     let surveyIdToActOn: string | null = $state(null);
 
-    $effect(() => {
-        if (!showEditDialog) {
-            surveyIdToActOn = null;
-        }
-    });
+    // $effect(() => {
+    //     if (!showEditDialog) {
+    //         surveyIdToActOn = null;
+    //     }
+    // });
 
     function initiateNewSurveyCreation() {
         const newId = createNewSurvey();
@@ -151,6 +150,4 @@
     onCancel={cancelResetResults}
 />
 
-{#if showEditDialog && surveyIdToActOn}
-  <EditSurveyDialog bind:show={showEditDialog} surveyIdToEdit={surveyIdToActOn} />
-{/if}
+<EditSurveyDialog bind:show={showEditDialog} surveyIdToEdit={surveyIdToActOn} />

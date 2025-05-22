@@ -73,7 +73,7 @@
     <Dialog.Content class="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <Dialog.Header>
             <Dialog.Title class="truncate pr-10">{m.edit_survey_settings_title()}</Dialog.Title>
-            <Dialog.Close asChild>
+            <Dialog.Close>
                 <Button.Root variant="ghost" size="icon" class="absolute top-3 right-3">
                     <X class="h-4 w-4" />
                     <span class="sr-only">{m.close_button()}</span>
@@ -122,7 +122,7 @@
                         type="text"
                         bind:value={newAnswerText}
                         placeholder={m.add_answer_placeholder()}
-                        on:keypress={(e) => { 
+                        onkeypress={(e) => { 
                             if (e.key === 'Enter') { 
                                 e.preventDefault();
                                 addAnswer(); 
@@ -163,8 +163,8 @@
         </div>
 
         <Dialog.Footer class="sm:justify-end">
-            <Button.Root variant="outline" on:click={handleClose}>{m.cancel_button()}</Button.Root>
-            <Button.Root on:click={handleSaveChanges}>{m.save_changes_button()}</Button.Root>
+            <Button.Root variant="outline" onclick={handleClose}>{m.cancel_button()}</Button.Root>
+            <Button.Root onclick={handleSaveChanges}>{m.save_changes_button()}</Button.Root>
         </Dialog.Footer>
     </Dialog.Content>
 </Dialog.Root>
