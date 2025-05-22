@@ -10,7 +10,7 @@ export interface AnswerOption {
 
 export interface SurveyAppearance {
     appBackgroundColor: string;
-    pillButtonColor: string;
+    buttonColor: string;
 }
 
 export interface Survey {
@@ -39,7 +39,7 @@ const createDefaultSurvey = (): Survey => {
         results: {},
         appearance: {
             appBackgroundColor: '#282c34',
-            pillButtonColor: '#007bff',
+            buttonColor: '#007bff',
         }
     };
 };
