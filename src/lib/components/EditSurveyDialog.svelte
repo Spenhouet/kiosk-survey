@@ -102,7 +102,7 @@
                                 type="text"
                                 placeholder={m.option_text_placeholder()}
                                 bind:value={answer.text} 
-                                class="flex-grow"
+                                class="grow"
                             />
                             <Button.Root
                                 type="button"
@@ -128,9 +128,9 @@
                                 addAnswer(); 
                             } 
                         }}
-                        class="flex-grow min-w-0"
+                        class="grow min-w-0"
                     />
-                    <Button.Root onclick={addAnswer} variant="secondary" class="flex-shrink-0">{m.add_answer_button()}</Button.Root>
+                    <Button.Root onclick={addAnswer} variant="secondary" class="shrink-0">{m.add_answer_button()}</Button.Root>
                 </div>
             </section>
 

@@ -60,7 +60,7 @@
             {#each currentSurveyAnswers as answer (answer.id)}
                 <Button.Root
                     onclick={() => handleAnswer(answer.id)}
-                    class="flex-grow px-6 min-w-30"
+                    class="grow px-6 min-w-30"
                     size="lg"
                     variant="default"
                 >{answer.text}</Button.Root>
