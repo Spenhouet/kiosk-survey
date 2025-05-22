@@ -44,7 +44,7 @@ const createDefaultSurvey = (): Survey => {
     };
 };
 
-export const surveys = persisted<Survey[]>('surveyApp_surveys', [createDefaultSurvey()]);
+export const surveys = persisted<Survey[]>('surveyApp_surveys', []);
 
 export function createNewSurvey(): string {
     const newSurvey = createDefaultSurvey();
