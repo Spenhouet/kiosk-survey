@@ -102,8 +102,8 @@
         {:else}
             <ul class="space-y-3">
                 {#each $surveys as survey (survey.id)}
-                    <Card.Root class="w-full flex flex-row items-center justify-between p-4 gap-0 hover:shadow-lg transition-shadow">
-                        <Card.Header class="p-0 w-full flex items-center">
+                    <Card.Root class="w-full flex sm:flex-row items-center justify-between p-4 gap-0 hover:shadow-lg transition-shadow">
+                        <Card.Header class="p-0 w-full flex justify-center sm:justify-between items-center">
                             <Card.Title class="text-lg truncate">
                                 {survey.question || (m.new_survey_name_placeholder ? m.new_survey_name_placeholder() : '(New Survey - Edit to add question)')}
                             </Card.Title>
