@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "../app.css";
+  import "../../app.css";
   import { page } from '$app/state'; 
   import { m } from "$lib/paraglide/messages.js";
   import { List } from '@lucide/svelte';
