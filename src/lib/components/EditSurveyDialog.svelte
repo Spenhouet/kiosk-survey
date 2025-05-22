@@ -219,8 +219,8 @@
             </div>
         </section>
          <div class="flex justify-end gap-3 pt-6">
-            <PillButton onClick={handleClose} customClass="px-4 py-2 bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" >{m.cancel_button()}</PillButton>
-            <PillButton onClick={handleSaveChanges} customClass="px-4 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">{ m.save_button()}</PillButton>
+            <PillButton onClick={handleClose} customClass="px-4 py-2 text-gray-100 bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" >{m.cancel_button()}</PillButton>
+            <PillButton onClick={handleSaveChanges} customClass="px-4 py-2 text-gray-100 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">{ m.save_button()}</PillButton>
         </div>
     </div>
 </div>

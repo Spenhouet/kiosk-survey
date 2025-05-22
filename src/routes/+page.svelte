@@ -155,31 +155,29 @@
             </ul>
         {/if}
     </section>
-
-    <!-- The old Create Survey Modal has been removed. -->
-
-    <!-- Delete Confirmation Modal -->
-    <ConfirmDialog
-        bind:show={showDeleteConfirm}
-        title={m.delete_survey_title()}
-        message={m.confirm_delete_survey_message_generic ? m.confirm_delete_survey_message_generic() : 'Are you sure you want to delete this survey?'}
-        onConfirm={confirmDeleteSurvey}
-        onCancel={cancelDeleteSurvey}
-    />
-
-    <!-- Reset Confirmation Modal -->
-    <ConfirmDialog
-        bind:show={showResetConfirm}
-        title={m.reset_survey_results_title()}
-        message={m.confirm_reset_survey_results_message_generic ? m.confirm_reset_survey_results_message_generic() : 'Are you sure you want to reset results for this survey?'}
-        onConfirm={confirmResetResults}
-        onCancel={cancelResetResults}
-    />
-
-    <!-- Edit Survey Dialog -->
-    <!-- Conditionally render EditSurveyDialog: only when surveyIdToActOn is set AND showEditDialog is true. -->
-    <!-- This ensures the component is re-created/destroyed when not active, helping with re-initialization. -->
-    {#if showEditDialog && surveyIdToActOn}
-      <EditSurveyDialog bind:show={showEditDialog} surveyIdToEdit={surveyIdToActOn} />
-    {/if}
 </div>
+
+<!-- Delete Confirmation Modal -->
+<ConfirmDialog
+    bind:show={showDeleteConfirm}
+    title={m.delete_survey_title()}
+    message={m.confirm_delete_survey_message_generic ? m.confirm_delete_survey_message_generic() : 'Are you sure you want to delete this survey?'}
+    onConfirm={confirmDeleteSurvey}
+    onCancel={cancelDeleteSurvey}
+/>
+
+<!-- Reset Confirmation Modal -->
+<ConfirmDialog
+    bind:show={showResetConfirm}
+    title={m.reset_survey_results_title()}
+    message={m.confirm_reset_survey_results_message_generic ? m.confirm_reset_survey_results_message_generic() : 'Are you sure you want to reset results for this survey?'}
+    onConfirm={confirmResetResults}
+    onCancel={cancelResetResults}
+/>
+
+<!-- Edit Survey Dialog -->
+<!-- Conditionally render EditSurveyDialog: only when surveyIdToActOn is set AND showEditDialog is true. -->
+<!-- This ensures the component is re-created/destroyed when not active, helping with re-initialization. -->
+{#if showEditDialog && surveyIdToActOn}
+  <EditSurveyDialog bind:show={showEditDialog} surveyIdToEdit={surveyIdToActOn} />
+{/if}

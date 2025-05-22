@@ -73,13 +73,13 @@
             <div class="flex justify-end space-x-3">
                 <PillButton
                     onClick={handleCancel}
-                    customClass="px-4 py-2 rounded text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                    customClass="px-4 py-2 rounded text-sm font-medium text-gray-100 dark:text-gray-300 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
                 >
                     {m.cancel_button()}
                 </PillButton>
                 <PillButton
                     onClick={handleConfirm}
-                    customClass="px-4 py-2 rounded text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    customClass="px-4 py-2 rounded text-sm font-medium text-gray-100 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                 >
                     {m.confirm_button()}
                 </PillButton>
