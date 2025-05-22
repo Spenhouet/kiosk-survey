@@ -5,7 +5,7 @@
         type AnswerOption
     } from '$lib/stores';
     import { m } from "$lib/paraglide/messages.js";
-    import { Trash, Paintbrush, X } from '@lucide/svelte';
+    import { Trash, Paintbrush, Signpost, MessageCircleQuestion } from '@lucide/svelte';
     import * as Dialog from "$lib/components/ui/dialog";
     import * as Button from "$lib/components/ui/button";
     import * as Input from "$lib/components/ui/input";
@@ -72,96 +72,95 @@
 <Dialog.Root bind:open={show}>
     <Dialog.Content class="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <Dialog.Header>
-            <Dialog.Title class="truncate pr-10">{m.edit_survey_settings_title()}</Dialog.Title>
-            <Dialog.Close>
-                <Button.Root variant="ghost" size="icon" class="absolute top-3 right-3">
-                    <X class="h-4 w-4" />
-                    <span class="sr-only">{m.close_button()}</span>
-                </Button.Root>
-            </Dialog.Close>
-        </Dialog.Header>
+            <Dialog.Title class="truncate">{m.edit_survey_settings_title()}</Dialog.Title>
         
-        <div class="grid gap-6 py-4">
-            <section>
-                <Label.Root for="surveyQuestionDialog" class="text-lg">{m.edit_question_label()}</Label.Root>
-                <Textarea.Root
-                    id="surveyQuestionDialog"
-                    bind:value={editableQuestion}
-                    placeholder={m.edit_question_label()}
-                    class="mt-2"
-                    rows={2}
-                />
-            </section>
-
-            <section>
-                <h3 class="text-lg font-medium mb-3">{m.answer_options_label()}</h3>
-                <div class="space-y-3 mb-4 max-h-60 overflow-y-auto pr-2">
-                    {#each editableAnswers as answer, i (answer.id)}
-                        <div class="flex items-center gap-2 p-2 bg-muted/50 dark:bg-muted/20 rounded">
-                            <Input.Root
-                                type="text"
-                                placeholder={m.option_text_placeholder()}
-                                bind:value={answer.text} 
-                                class="grow"
-                            />
-                            <Button.Root
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onclick={() => removeAnswer(answer.id)}
-                                aria-label={m.remove_answer_label()}
-                            >
-                                <Trash class="w-4 h-4 text-destructive" />
-                            </Button.Root>
-                        </div>
-                    {/each}
-                </div>
-                <div class="flex items-center gap-2">
-                    <Input.Root
-                        id="newAnswerInput"
-                        type="text"
-                        bind:value={newAnswerText}
-                        placeholder={m.add_answer_placeholder()}
-                        onkeypress={(e) => { 
-                            if (e.key === 'Enter') { 
-                                e.preventDefault();
-                                addAnswer(); 
-                            } 
-                        }}
-                        class="grow min-w-0"
+            <div class="grid gap-6 py-4">
+                <section>
+                    <Label.Root for="surveyQuestionDialog" class="text-md">
+                        <MessageCircleQuestion class="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
+                        {m.edit_question_label()}
+                    </Label.Root>
+                    <Textarea.Root
+                        id="surveyQuestionDialog"
+                        bind:value={editableQuestion}
+                        placeholder={m.edit_question_label()}
+                        class="mt-2"
+                        rows={2}
                     />
-                    <Button.Root onclick={addAnswer} variant="secondary" class="shrink-0">{m.add_answer_button()}</Button.Root>
-                </div>
-            </section>
+                </section>
 
-            <section>
-                <h3 class="text-lg font-medium mb-3 flex items-center">
-                    <Paintbrush class="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
-                    {m.appearance_settings_title()}
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <Label.Root for="appBackgroundColorDialog" class="text-sm">{m.background_color_label()}</Label.Root>
-                        <Input.Root
-                            type="color"
-                            id="appBackgroundColorDialog"
-                            bind:value={editableAppBackgroundColor}
-                            class="mt-1 w-full h-10"
-                        />
+                <section>
+                    <h3 class="text-md font-medium mb-3 flex items-center">
+                        <Signpost class="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
+                        {m.answer_options_label()}
+                    </h3>
+                    <div class="space-y-3 mb-4 max-h-60 overflow-y-auto">
+                        {#each editableAnswers as answer, i (answer.id)}
+                            <div class="flex items-center gap-2 bg-muted/50 dark:bg-muted/20 rounded">
+                                <Input.Root
+                                    type="text"
+                                    placeholder={m.option_text_placeholder()}
+                                    bind:value={answer.text} 
+                                    class="grow"
+                                />
+                                <Button.Root
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onclick={() => removeAnswer(answer.id)}
+                                    aria-label={m.remove_answer_label()}
+                                >
+                                    <Trash class="w-4 h-4 text-destructive" />
+                                </Button.Root>
+                            </div>
+                        {/each}
                     </div>
-                    <div>
-                        <Label.Root for="buttonColorDialog" class="text-sm">{m.button_color_label()}</Label.Root>
+                    <div class="flex items-center gap-2">
                         <Input.Root
-                            type="color"
-                            id="buttonColorDialog"
-                            bind:value={editableButtonColor}
-                            class="mt-1 w-full h-10"
+                            id="newAnswerInput"
+                            type="text"
+                            bind:value={newAnswerText}
+                            placeholder={m.add_answer_placeholder()}
+                            onkeypress={(e) => { 
+                                if (e.key === 'Enter') { 
+                                    e.preventDefault();
+                                    addAnswer(); 
+                                } 
+                            }}
+                            class="grow min-w-0"
                         />
+                        <Button.Root onclick={addAnswer} variant="secondary" class="shrink-0">{m.add_answer_button()}</Button.Root>
                     </div>
-                </div>
-            </section>
-        </div>
+                </section>
 
+                <section>
+                    <h3 class="text-md font-medium mb-3 flex items-center">
+                        <Paintbrush class="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
+                        {m.appearance_settings_title()}
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <Label.Root for="appBackgroundColorDialog" class="text-sm">{m.background_color_label()}</Label.Root>
+                            <Input.Root
+                                type="color"
+                                id="appBackgroundColorDialog"
+                                bind:value={editableAppBackgroundColor}
+                                class="mt-1 w-full h-10"
+                            />
+                        </div>
+                        <div>
+                            <Label.Root for="buttonColorDialog" class="text-sm">{m.button_color_label()}</Label.Root>
+                            <Input.Root
+                                type="color"
+                                id="buttonColorDialog"
+                                bind:value={editableButtonColor}
+                                class="mt-1 w-full h-10"
+                            />
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </Dialog.Header>
         <Dialog.Footer class="sm:justify-end">
             <Button.Root variant="outline" onclick={handleClose}>{m.cancel_button()}</Button.Root>
             <Button.Root onclick={handleSaveChanges}>{m.save_changes_button()}</Button.Root>
