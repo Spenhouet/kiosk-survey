@@ -3,7 +3,7 @@
   import { page } from '$app/state'; 
   import { m } from "$lib/paraglide/messages.js";
   import { getLocale, setLocale, locales } from "$lib/paraglide/runtime";
-  import { Sun, Moon, List } from 'lucide-svelte';
+  import { Sun, Moon, List } from '@lucide/svelte';
   import { surveys } from '$lib/stores'; 
   import { resolveRoute } from '$app/paths';
   import { ModeWatcher, toggleMode, mode } from "mode-watcher";
@@ -21,7 +21,6 @@
   function handleLanguageChange(value: string | undefined) {
     if (value) {
       setLocale(value as any);
-      // currentLang will be updated by the reactive $state variable when getLocale() changes
     }
   }
 </script>
@@ -43,7 +42,7 @@
     </div>
     <!-- Right Controls: Language Switcher and Theme Toggle -->
     <div class="flex items-center gap-4">
-      <Select.Root value={currentLang} onValueChange={handleLanguageChange}>
+      <Select.Root bind:value={currentLang} onValueChange={handleLanguageChange}>
         <Select.Trigger class="w-[180px]">
           <Select.Value placeholder={m.select_language_placeholder()} />
         </Select.Trigger>

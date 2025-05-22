@@ -2,7 +2,7 @@
     import { surveys, createNewSurvey, deleteSurvey, resetSurveyResults } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
-    import { PlusCircle, Trash, PlayCircle, Pencil, ArrowRightCircle, ChartBar } from 'lucide-svelte';
+    import { PlusCircle, Trash, PlayCircle, Pencil, ArrowRightCircle, ChartBar } from '@lucide/svelte';
     import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
     import EditSurveyDialog from '$lib/components/EditSurveyDialog.svelte';
     import { resolveRoute } from '$app/paths';
