@@ -94,7 +94,7 @@
                 onclick={initiateNewSurveyCreation}
                 title={m.create_new_survey_title()}
             >
-                <PlusCircle class="w-6 h-6 text-green-600 dark:text-green-400" />
+                <PlusCircle class="size-6 text-green-600 dark:text-green-400" />
             </Button.Root>
         </div>
 
@@ -111,19 +111,19 @@
                         </Card.Header>
                         <Card.Content class="p-0 flex items-center gap-1 sm:gap-2">
                             <Button.Root variant="ghost" size="icon" onclick={() => handleSelectSurvey(survey.id)} title={m.start_survey_button_title()}>
-                                <PlayCircle class="w-5 h-5 sm:w-6 sm:h-6 text-green-600 dark:text-green-400" />
+                                <PlayCircle class="size-5 sm:size-6 text-green-600 dark:text-green-400" />
                             </Button.Root>
                             <Button.Root variant="ghost" size="icon" onclick={() => handleViewResults(survey.id)} title={m.view_survey_results_title()}>
-                                <ChartBar class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 dark:text-yellow-400" />
+                                <ChartBar class="size-5 sm:size-6 text-yellow-500 dark:text-yellow-400" />
                             </Button.Root>
                             <Button.Root variant="ghost" size="icon" onclick={() => handleEditSurvey(survey.id)} title={m.edit_survey_settings_title()}>
-                                <Pencil class="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 dark:text-blue-400" />
+                                <Pencil class="size-5 sm:size-6 text-blue-500 dark:text-blue-400" />
                             </Button.Root>
                             <Button.Root variant="ghost" size="icon" onclick={() => requestResetResults(survey.id)} title={m.reset_survey_results_title()}>
-                                <ArrowRightCircle class="w-5 h-5 sm:w-6 sm:h-6 text-orange-500 dark:text-orange-400" />
+                                <ArrowRightCircle class="size-5 sm:size-6 text-orange-500 dark:text-orange-400" />
                             </Button.Root>
                             <Button.Root variant="ghost" size="icon" onclick={() => requestDeleteSurvey(survey.id)} title={m.delete_survey_button_title()}>
-                                <Trash class="w-5 h-5 sm:w-6 sm:h-6 text-red-500 dark:text-red-400" />
+                                <Trash class="size-5 sm:size-6 text-red-500 dark:text-red-400" />
                             </Button.Root>
                         </Card.Content>
                     </Card.Root>
