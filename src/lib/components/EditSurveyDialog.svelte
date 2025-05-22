@@ -5,7 +5,7 @@
         type AnswerOption
     } from '$lib/stores';
     import { m } from "$lib/paraglide/messages.js";
-    import { Trash, Paintbrush, X } from 'lucide-svelte';
+    import { Trash, Paintbrush, X } from '@lucide/svelte';
     import * as Dialog from "$lib/components/ui/dialog";
     import * as Button from "$lib/components/ui/button";
     import * as Input from "$lib/components/ui/input";

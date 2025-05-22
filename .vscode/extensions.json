@@ -3,6 +3,7 @@
         "inlang.vs-code-extension",
         "svelte.svelte-vscode",
         "dbaeumer.vscode-eslint",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "eamodio.gitlens"
     ]
 }
