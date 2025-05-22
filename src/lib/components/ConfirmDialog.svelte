@@ -23,9 +23,7 @@
     }
 
     function handleCancel() {
-        if (onCancel) {
-            onCancel();
-        }
+        onCancel();
         show = false;
     }
 </script>
@@ -38,11 +36,11 @@
                 <Dialog.Description>{message}</Dialog.Description>
             {/if}
         </Dialog.Header>
-        <Dialog.Footer class="sm:justify-end space-x-2">
-            <Button.Root variant="outline" on:click={handleCancel}>
+        <Dialog.Footer class="sm:justify-end">
+            <Button.Root variant="outline" onclick={handleCancel}>
                 {m.cancel_button()}
             </Button.Root>
-            <Button.Root variant="destructive" on:click={handleConfirm}>
+            <Button.Root variant="destructive" onclick={handleConfirm}>
                 {m.confirm_button()}
             </Button.Root>
         </Dialog.Footer>
