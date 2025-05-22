@@ -9,7 +9,7 @@ export interface AnswerOption {
 }
 
 export interface SurveyAppearance {
-    appBackgroundColor: string;
+    backgroundColor: string;
     buttonColor: string;
 }
 
@@ -24,8 +24,8 @@ export interface Survey {
 const generateDefaultsForLanguage = (langTag: Locale): { question: string, answers: AnswerOption[] } => {
     const question = m.default_survey_question({}, { locale: langTag });
     const answers: AnswerOption[] = [
-        { id: 'default_answer_option_1', text: m.default_answer_option_1({}, { locale: langTag }) },
-        { id: 'default_answer_option_2', text: m.default_answer_option_2({}, { locale: langTag }) },
+        { id: crypto.randomUUID(), text: m.default_answer_option_1({}, { locale: langTag }) },
+        { id: crypto.randomUUID(), text: m.default_answer_option_2({}, { locale: langTag }) },
     ];
     return { question, answers };
 };
@@ -38,7 +38,7 @@ const createDefaultSurvey = (): Survey => {
         answers: defaults.answers,
         results: {},
         appearance: {
-            appBackgroundColor: '#eed7f9',
+            backgroundColor: '#eed7f9',
             buttonColor: '#767cf9',
         }
     };

@@ -21,14 +21,14 @@
     
     let editableQuestion = $state('');
     let editableAnswers = $state<AnswerOption[]>([]);
-    let editableAppBackgroundColor = $state('#eed7f9');
+    let editableBackgroundColor = $state('#eed7f9');
     let editableButtonColor = $state('#767cf9');
 
     $effect(() => {
         if (show && currentSurvey) {
             editableQuestion = currentSurvey.question;
             editableAnswers = JSON.parse(JSON.stringify(currentSurvey.answers));
-            editableAppBackgroundColor = currentSurvey.appearance.appBackgroundColor;
+            editableBackgroundColor = currentSurvey.appearance.backgroundColor;
             editableButtonColor = currentSurvey.appearance.buttonColor;
             newAnswerText = '';
         }
@@ -55,7 +55,7 @@
             question: editableQuestion,
             answers: editableAnswers,
             appearance: { 
-                appBackgroundColor: editableAppBackgroundColor, 
+                backgroundColor: editableBackgroundColor, 
                 buttonColor: editableButtonColor 
             }
         });
@@ -141,11 +141,11 @@
                 </h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <Label.Root for="appBackgroundColorDialog" class="text-sm">{m.background_color_label()}</Label.Root>
+                        <Label.Root for="backgroundColorDialog" class="text-sm">{m.background_color_label()}</Label.Root>
                         <Input.Root
                             type="color"
-                            id="appBackgroundColorDialog"
-                            bind:value={editableAppBackgroundColor}
+                            id="backgroundColorDialog"
+                            bind:value={editableBackgroundColor}
                             class="mt-1 w-full h-10"
                         />
                     </div>
