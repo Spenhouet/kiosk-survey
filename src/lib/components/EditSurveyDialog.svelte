@@ -22,14 +22,14 @@
     let editableQuestion = $state('');
     let editableAnswers = $state<AnswerOption[]>([]);
     let editableAppBackgroundColor = $state('#282c34');
-    let editablePillButtonColor = $state('#007bff');
+    let editableButtonColor = $state('#007bff');
 
     $effect(() => {
         if (show && currentSurvey) {
             editableQuestion = currentSurvey.question;
             editableAnswers = JSON.parse(JSON.stringify(currentSurvey.answers));
             editableAppBackgroundColor = currentSurvey.appearance.appBackgroundColor;
-            editablePillButtonColor = currentSurvey.appearance.pillButtonColor;
+            editableButtonColor = currentSurvey.appearance.buttonColor;
             newAnswerText = '';
         }
     });
@@ -56,7 +56,7 @@
             answers: editableAnswers,
             appearance: { 
                 appBackgroundColor: editableAppBackgroundColor, 
-                pillButtonColor: editablePillButtonColor 
+                buttonColor: editableButtonColor 
             }
         });
         handleClose();
@@ -150,11 +150,11 @@
                         />
                     </div>
                     <div>
-                        <Label.Root for="pillButtonColorDialog" class="text-sm">{m.pill_button_color_label()}</Label.Root>
+                        <Label.Root for="buttonColorDialog" class="text-sm">{m.button_color_label()}</Label.Root>
                         <Input.Root
                             type="color"
-                            id="pillButtonColorDialog"
-                            bind:value={editablePillButtonColor}
+                            id="buttonColorDialog"
+                            bind:value={editableButtonColor}
                             class="mt-1 w-full h-10"
                         />
                     </div>
