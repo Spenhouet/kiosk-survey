@@ -70,7 +70,7 @@
 
 {#if currentSurvey} 
 <Dialog.Root bind:open={show}>
-    <Dialog.Content class="sm:max-w-2xl max-h-[calc(100vh-8rem)] m-4 flex flex-col">
+    <Dialog.Content class="sm:max-w-2xl max-h-[calc(100vh-6rem)] flex flex-col">
         <Dialog.Header class="flex-shrink-0 p-1">
             <Dialog.Title class="truncate">{m.edit_survey_settings_title()}</Dialog.Title>
         </Dialog.Header>
