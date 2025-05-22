@@ -19,7 +19,7 @@
 
 <div
   class="min-h-screen w-screen flex flex-col items-center justify-center relative p-4 sm:p-8 bg-background text-foreground"
-  style="background-color: {currentSurvey?.appearance.appBackgroundColor || ''};"
+  style="background-color: {currentSurvey?.appearance.backgroundColor || ''};"
 >
   <!-- Top Controls: Overview Icon Left, Language Switcher Right, Theme Toggle -->
   <div class="absolute top-4 left-0 w-full flex justify-between items-center px-4 sm:top-6 z-10">
