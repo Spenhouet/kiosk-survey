@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
+    import { resolveRoute } from '$app/paths';
+
 
 	function goHome() {
-		goto('/');
+		goto(resolveRoute('/', {}));
 	}
 </script>
 
