@@ -6,6 +6,8 @@ import { defineConfig } from "vite";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/experimental-addon-test/vitest-plugin";
+import { SvelteKitPWA } from "@vite-pwa/sveltekit";
+
 const dirname =
   typeof __dirname !== "undefined"
     ? __dirname
@@ -19,6 +21,9 @@ export default defineConfig({
     paraglideVitePlugin({
       project: "./project.inlang",
       outdir: "./src/lib/paraglide",
+    }),
+    SvelteKitPWA({
+      /* pwa options */
     }),
   ],
   test: {
