@@ -7,8 +7,10 @@ export const prerender = true;
 
 export const GET: RequestHandler = async ({ params }) => {
 	return jsonResponse({
+        id: 'kiosk-survey',
 		name: 'KioskSurvey',
 		short_name: 'KioskSurvey',
+        description: 'KioskSurvey is a survey application that allows users to create and manage offline surveys easily.',
 		icons: [
 			{
 				src: resolveRoute('/android-chrome-192x192.png', {}),
@@ -21,7 +23,8 @@ export const GET: RequestHandler = async ({ params }) => {
 				type: 'image/png'
 			}
 		],
-		theme_color: '#ffffff',
+        start_url: ".",
+		theme_color: '#eed7f9',
 		background_color: '#ffffff',
 		display: 'standalone'
 	});
