@@ -1,6 +1,15 @@
-# KioskSurvey
 
-KioskSurvey is a web application designed for creating and conducting simple surveys, optimized for kiosk environments or standalone tablet use. It allows users to easily set up questions with multiple-choice answers and view results in real-time. The interface is multilingual, supporting English and German out of the box.
+<h1 align="center">
+KioskSurvey
+</h1>
+<p align="center">
+  <a href="https://spenhouet.com/kiosk-survey/"><img src="https://spenhouet.com/kiosk-survey/preview.png" alt="KioskSurvey Preview"></a>
+</p>
+<p align="center">
+    <em>KioskSurvey is a web application designed for creating and conducting simple surveys, optimized for kiosk environments or standalone tablet use. It allows users to easily set up questions with multiple-choice answers and view results in real-time. The interface is multilingual, supporting English and German out of the box.</em>
+</p>
+
+<p align="center"><em>Check it out <a href="https://spenhouet.com/kiosk-survey/">here</a>.</em></p>
 
 ## Key Features
 
@@ -17,7 +26,7 @@ KioskSurvey is a web application designed for creating and conducting simple sur
 *   **SvelteKit:** Frontend framework for building the application.
 *   **Svelte 5 (Runes):** Utilizes the latest Svelte features for reactivity and state management.
 *   **TypeScript:** For type safety and improved developer experience.
-*   **Tailwind CSS:** For styling the user interface.
+*   **shadcn & Tailwind CSS:** For styling the user interface.
 *   **Paraglide JS:** For internationalization (i18n) and managing translations.
 *   **Vite:** Build tool for fast development and optimized production builds.
 *   **Bun:** Used as the runtime and package manager (implied by `bun.lockb`).
@@ -70,16 +79,14 @@ KioskSurvey is a web application designed for creating and conducting simple sur
 
 ## Project Structure Highlights
 
-*   `src/routes/`: Contains the SvelteKit page and layout components.
+*   `src/routes/(app)`: Contains the SvelteKit page and layout components.
     *   `+page.svelte`: Main page for managing surveys.
     *   `survey/+page.svelte`: Page for taking a survey.
     *   `results/+page.svelte`: Page for viewing survey results.
     *   `+layout.svelte`: Root layout, handles language switching and global styles.
 *   `src/lib/stores.ts`: Manages the state of surveys (creation, results, persistence to local storage).
 *   `src/lib/components/`: Reusable Svelte components (e.g., dialogs, buttons).
-*   `src/lib/paraglide/`: Configuration and message files for Paraglide JS i18n.
 *   `messages/`: Source JSON files for translations (e.g., `en.json`, `de.json`).
-*   `project.inlang/`: Inlang project configuration for managing translations.
 
 ## Contributing
 
