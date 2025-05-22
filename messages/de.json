@@ -64,5 +64,8 @@
   "new_survey_name_placeholder": "Umfragenamen eingeben...",
   "confirm_delete_survey_message_generic": "Möchten Sie diese Umfrage wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
   "confirm_reset_survey_results_message_generic": "Möchten Sie die Ergebnisse für diese Umfrage wirklich zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.",
-  "save_button": "Speichern"
+  "save_button": "Speichern",
+  "notFoundTitle": "404 - Seite nicht gefunden",
+  "notFoundText": "Hoppla! Die gesuchte Seite existiert nicht.",
+  "goToHomepageButton": "Zur Startseite"
 }

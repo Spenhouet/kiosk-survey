@@ -31,7 +31,7 @@ jobs:
         run: bun run build # Changed from npm run build
         env:
           NODE_ENV: production # For svelte.config.js base path
-          # PARAGLIDE_PROJECT_PATH: ./project.inlang # If Paraglide needs explicit path in CI
+          BASE_PATH: '/${{ github.event.repository.name }}'
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
