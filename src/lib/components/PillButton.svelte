@@ -16,13 +16,13 @@
         return surveyInstance ? surveyInstance.appearance.pillButtonColor : '#007bff'; // Default if survey not found
     });
 
-    const baseClasses = "p-3 text-lg rounded-full font-semibold transition-colors duration-150 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed";
+    const baseClasses = "p-3 text-lg rounded-full font-semibold transition-colors duration-150 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed text-white";
 </script>
 
 <button
     onclick={onClick} 
     disabled={disabled}
-    class="{baseClasses} {customClass} text-white focus:ring-[var(--pill-bg-color)] hover:brightness-90"
+    class="{baseClasses} {customClass} focus:ring-[var(--pill-bg-color)] hover:brightness-90"
     style="--pill-bg-color: {currentPillButtonColor}; background-color: var(--pill-bg-color);"
 >
     {@render children()}

@@ -67,5 +67,7 @@
   "save_button": "Speichern",
   "notFoundTitle": "404 - Seite nicht gefunden",
   "notFoundText": "Hoppla! Die gesuchte Seite existiert nicht.",
-  "goToHomepageButton": "Zur Startseite"
+  "goToHomepageButton": "Zur Startseite",
+  "theme_switcher_to_light_aria_label": "Hellen Modus aktivieren",
+  "theme_switcher_to_dark_aria_label": "Dunklen Modus aktivieren"
 }

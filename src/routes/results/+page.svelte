@@ -37,7 +37,7 @@
 
 {#if currentSurvey}
     <div class="w-full max-w-xl text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">
             {m.results_page_title()}: {currentSurvey.question}
         </h2>
 
@@ -48,13 +48,13 @@
                     {@const percentage = totalVotes > 0 ? (votes / totalVotes) * 100 : 0}
                     {@const display = getAnswerDisplay(answer.id)}
                     <div class="text-left">
-                        <div class="flex justify-between items-center mb-1 text-gray-100">
+                        <div class="flex justify-between items-center mb-1 text-gray-800 dark:text-gray-100">
                             <span class="text-md sm:text-lg">
                                 {display.text}: {votes} {votes === 1 ? m.votes_suffix_singular() : m.votes_suffix_plural()}
                             </span>
-                            {#if percentage > 0}<span class="text-sm text-gray-300">{percentage.toFixed(1)}%</span>{/if}
+                            {#if percentage > 0}<span class="text-sm text-gray-600 dark:text-gray-300">{percentage.toFixed(1)}%</span>{/if}
                         </div>
-                        <div class="w-full bg-gray-600 rounded-full h-6 sm:h-8 relative overflow-hidden">
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-6 sm:h-8 relative overflow-hidden">
                             <div
                                 class="h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
                                 style:width="{percentage}%"
@@ -68,9 +68,9 @@
                     </div>
                 {/each}
             </div>
-            <p class="text-gray-300">{m.total_votes_label({ count: totalVotes })}</p>
+            <p class="text-gray-600 dark:text-gray-300">{m.total_votes_label({ count: totalVotes })}</p>
         {:else}
-            <p class="text-xl text-gray-400 my-8">{m.no_responses_message()}</p>
+            <p class="text-xl text-gray-600 dark:text-gray-400 my-8">{m.no_responses_message()}</p>
         {/if}
 
         <PillButton
@@ -81,5 +81,5 @@
         </PillButton>
     </div>
 {:else}
-    <p class="text-xl text-gray-400 my-8">{m.loading_survey_data()}</p>
+    <p class="text-xl text-gray-600 dark:text-gray-400 my-8">{m.loading_survey_data()}</p>
 {/if}

@@ -10,8 +10,8 @@
 </script>
 
 <div class="flex flex-col items-center justify-center h-screen text-center">
-	<h1 class="text-4xl font-bold mb-4">{m.notFoundTitle()}</h1>
-	<p class="text-lg mb-8">{m.notFoundText()}</p>
+	<h1 class="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">{m.notFoundTitle()}</h1>
+	<p class="text-lg mb-8 text-gray-700 dark:text-gray-300">{m.notFoundText()}</p>
 	<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" on:click={goHome}>
 		{m.goToHomepageButton()}
 	</button>
