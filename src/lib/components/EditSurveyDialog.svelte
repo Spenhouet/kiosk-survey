@@ -21,8 +21,8 @@
     
     let editableQuestion = $state('');
     let editableAnswers = $state<AnswerOption[]>([]);
-    let editableAppBackgroundColor = $state('#282c34');
-    let editableButtonColor = $state('#007bff');
+    let editableAppBackgroundColor = $state('#eed7f9');
+    let editableButtonColor = $state('#767cf9');
 
     $effect(() => {
         if (show && currentSurvey) {
@@ -70,7 +70,7 @@
 
 {#if currentSurvey} 
 <Dialog.Root bind:open={show}>
-    <Dialog.Content class="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+    <Dialog.Content class="sm:max-w-2xl max-h-[90vh]">
         <Dialog.Header>
             <Dialog.Title class="truncate">{m.edit_survey_settings_title()}</Dialog.Title>
         
@@ -94,7 +94,7 @@
                         <Signpost class="w-5 h-5 mr-2 text-primary" aria-hidden="true" />
                         {m.answer_options_label()}
                     </h3>
-                    <div class="space-y-3 mb-4 max-h-60 overflow-y-auto">
+                    <div class="space-y-3 mb-4 max-h-60">
                         {#each editableAnswers as answer, i (answer.id)}
                             <div class="flex items-center gap-2 bg-muted/50 dark:bg-muted/20 rounded">
                                 <Input.Root

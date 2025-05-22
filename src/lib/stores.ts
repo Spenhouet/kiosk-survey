@@ -38,8 +38,8 @@ const createDefaultSurvey = (): Survey => {
         answers: defaults.answers,
         results: {},
         appearance: {
-            appBackgroundColor: '#282c34',
-            buttonColor: '#007bff',
+            appBackgroundColor: '#eed7f9',
+            buttonColor: '#767cf9',
         }
     };
 };
