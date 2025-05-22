@@ -2,7 +2,7 @@
     import { surveys, createNewSurvey, deleteSurvey, resetSurveyResults } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
-    import { PlusCircle, Trash, PlayCircle, Pencil, ArrowRightCircle, ChartBar } from '@lucide/svelte';
+    import { PlusCircle, Trash, PlayCircle, Pencil, RotateCcw, ChartBar } from '@lucide/svelte';
     import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
     import EditSurveyDialog from '$lib/components/EditSurveyDialog.svelte';
     import { resolveRoute } from '$app/paths';
@@ -94,7 +94,7 @@
                 onclick={initiateNewSurveyCreation}
                 title={m.create_new_survey_title()}
             >
-                <PlusCircle class="size-6 text-green-600 dark:text-green-400" />
+                <PlusCircle class="size-5 sm:size-6 text-green-600 dark:text-green-400" />
             </Button.Root>
         </div>
 
@@ -103,13 +103,13 @@
         {:else}
             <ul class="space-y-3">
                 {#each $surveys as survey (survey.id)}
-                    <Card.Root class="flex items-center justify-between p-4 hover:shadow-lg transition-shadow">
-                        <Card.Header class="p-0 flex-1">
+                    <Card.Root class="w-full flex flex-row items-center justify-between p-4 gap-0 hover:shadow-lg transition-shadow">
+                        <Card.Header class="p-0 w-full flex items-center">
                             <Card.Title class="text-lg truncate">
                                 {survey.question || (m.new_survey_name_placeholder ? m.new_survey_name_placeholder() : '(New Survey - Edit to add question)')}
                             </Card.Title>
                         </Card.Header>
-                        <Card.Content class="p-0 flex items-center gap-1 sm:gap-2">
+                        <Card.Content class="p-0 flex justify-between items-center gap-0 sm:gap-2">
                             <Button.Root variant="ghost" size="icon" onclick={() => handleSelectSurvey(survey.id)} title={m.start_survey_button_title()}>
                                 <PlayCircle class="size-5 sm:size-6 text-green-600 dark:text-green-400" />
                             </Button.Root>
@@ -120,7 +120,7 @@
                                 <Pencil class="size-5 sm:size-6 text-blue-500 dark:text-blue-400" />
                             </Button.Root>
                             <Button.Root variant="ghost" size="icon" onclick={() => requestResetResults(survey.id)} title={m.reset_survey_results_title()}>
-                                <ArrowRightCircle class="size-5 sm:size-6 text-orange-500 dark:text-orange-400" />
+                                <RotateCcw class="size-5 sm:size-6 text-orange-500 dark:text-orange-400" />
                             </Button.Root>
                             <Button.Root variant="ghost" size="icon" onclick={() => requestDeleteSurvey(survey.id)} title={m.delete_survey_button_title()}>
                                 <Trash class="size-5 sm:size-6 text-red-500 dark:text-red-400" />
