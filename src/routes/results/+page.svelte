@@ -2,25 +2,13 @@
     import { surveys } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
-    import { page } from '$app/state'; // Assuming $app/state is correct for Svelte version
-    import PillButton from '$lib/components/PillButton.svelte';
+    import { page } from '$app/state';
     import { resolveRoute } from '$app/paths';
+    import * as Button from "$lib/components/ui/button";
+    import * as Progress from "$lib/components/ui/progress";
 
-
-    // Get surveyId from query parameter 'id'
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
-
-    // Find the current survey from the surveys store using surveyIdFromQuery
     let currentSurvey = $derived(surveyIdFromQuery ? $surveys.find(s => s.id === surveyIdFromQuery) : undefined);
-
-    let currentPillButtonColor = $derived.by(() => {
-        const id = page.url.searchParams.get('id');
-        if (!id) return '#007bff'; // Default color if no surveyId in route
-        const surveyInstance = $surveys.find(s => s.id === id);
-        return surveyInstance ? surveyInstance.appearance.pillButtonColor : '#007bff'; // Default if survey not found
-    });
-
-    // Svelte 5 derived state from currentSurvey
     let totalVotes = $derived(currentSurvey ? Object.values(currentSurvey.results).reduce((sum, count) => sum + count, 0) : 0);
 
     function getAnswerDisplay(answerId: string): { text: string } {
@@ -37,7 +25,7 @@
 
 {#if currentSurvey}
     <div class="w-full max-w-xl text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6">
             {m.results_page_title()}: {currentSurvey.question}
         </h2>
 
@@ -48,38 +36,29 @@
                     {@const percentage = totalVotes > 0 ? (votes / totalVotes) * 100 : 0}
                     {@const display = getAnswerDisplay(answer.id)}
                     <div class="text-left">
-                        <div class="flex justify-between items-center mb-1 text-gray-800 dark:text-gray-100">
+                        <div class="flex justify-between items-center mb-1">
                             <span class="text-md sm:text-lg">
                                 {display.text}: {votes} {votes === 1 ? m.votes_suffix_singular() : m.votes_suffix_plural()}
                             </span>
-                            {#if percentage > 0}<span class="text-sm text-gray-600 dark:text-gray-300">{percentage.toFixed(1)}%</span>{/if}
+                            {#if percentage > 0}<span class="text-sm text-muted-foreground">{percentage.toFixed(1)}%</span>{/if}
                         </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-6 sm:h-8 relative overflow-hidden">
-                            <div
-                                class="h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
-                                style:width="{percentage}%"
-                                style="--pill-bg-color: {currentPillButtonColor}; background-color: var(--pill-bg-color);"
-                            >
-                                {#if percentage > 15}
-                                    <span class="text-xs font-medium text-white whitespace-nowrap">{percentage.toFixed(1)}%</span>
-                                {/if}
-                            </div>
-                        </div>
+                        <Progress.Root value={percentage} class="h-6 sm:h-8" />
                     </div>
                 {/each}
             </div>
-            <p class="text-gray-600 dark:text-gray-300">{m.total_votes_label({ count: totalVotes })}</p>
+            <p class="text-muted-foreground">{m.total_votes_label({ count: totalVotes })}</p>
         {:else}
-            <p class="text-xl text-gray-600 dark:text-gray-400 my-8">{m.no_responses_message()}</p>
+            <p class="text-xl text-muted-foreground my-8">{m.no_responses_message()}</p>
         {/if}
 
-        <PillButton
-            onClick={() => goto(resolveRoute(`/survey?id=${surveyIdFromQuery}`, {}))}
-            customClass="mt-8 px-6 py-3"
+        <Button.Root
+            onclick={() => goto(resolveRoute(`/survey?id=${surveyIdFromQuery}`, {}))}
+            class="mt-8"
+            size="lg" 
         >
             {m.repeat_survey_button()}
-        </PillButton>
+        </Button.Root>
     </div>
 {:else}
-    <p class="text-xl text-gray-600 dark:text-gray-400 my-8">{m.loading_survey_data()}</p>
+    <p class="text-xl text-muted-foreground my-8">{m.loading_survey_data()}</p>
 {/if}

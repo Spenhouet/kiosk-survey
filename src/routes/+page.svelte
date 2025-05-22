@@ -2,12 +2,12 @@
     import { surveys, createNewSurvey, deleteSurvey, resetSurveyResults } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from "$lib/paraglide/messages.js";
-    import { Icon } from '@steeze-ui/svelte-icon';
-    import { PlusCircle, Trash, PlayCircle, Pencil, ArrowPath, ChartBar } from '@steeze-ui/heroicons';
+    import { PlusCircle, Trash, PlayCircle, Pencil, ArrowRightCircle, ChartBar } from 'lucide-svelte';
     import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
     import EditSurveyDialog from '$lib/components/EditSurveyDialog.svelte';
     import { resolveRoute } from '$app/paths';
-
+    import * as Button from "$lib/components/ui/button";
+    import * as Card from "$lib/components/ui/card";
 
     // State for confirmation dialogs
     let showDeleteConfirm = $state(false);
@@ -18,18 +18,15 @@
     let surveyIdToActOn: string | null = $state(null);
 
     $effect(() => {
-        // When the edit dialog is closed (showEditDialog becomes false),
-        // reset surveyIdToActOn. This is crucial for re-initializing EditSurveyDialog
-        // if it's opened again, by ensuring its surveyIdToEdit prop changes (from null to an ID).
         if (!showEditDialog) {
             surveyIdToActOn = null;
         }
     });
 
     function initiateNewSurveyCreation() {
-        const newId = createNewSurvey(); // Assumes this creates a survey with a default/empty question
-        surveyIdToActOn = newId; // Set the ID for the dialog
-        showEditDialog = true;   // Open the dialog
+        const newId = createNewSurvey();
+        surveyIdToActOn = newId;
+        showEditDialog = true;
     }
 
     function handleSelectSurvey(id: string) {
@@ -46,12 +43,10 @@
             deleteSurvey(surveyIdToActOn);
         }
         showDeleteConfirm = false;
-        // surveyIdToActOn will be reset by the $effect when showEditDialog is (or becomes) false.
     }
 
     function cancelDeleteSurvey() {
         showDeleteConfirm = false;
-        // surveyIdToActOn will be reset by the $effect.
     }
 
     function handleEditSurvey(surveyId: string) {
@@ -73,12 +68,10 @@
             resetSurveyResults(surveyIdToActOn);
         }
         showResetConfirm = false;
-        // surveyIdToActOn will be reset by the $effect.
     }
 
     function cancelResetResults() {
         showResetConfirm = false;
-        // surveyIdToActOn will be reset by the $effect.
     }
 </script>
 
@@ -88,69 +81,52 @@
 
 <div class="w-full max-w-3xl mx-auto p-6 sm:p-8 space-y-6">
     <div class="flex justify-between items-center">
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-gray-100">{m.surveys_page_title()}</h1>
+        <h1 class="text-3xl sm:text-4xl font-bold">{m.surveys_page_title()}</h1>
     </div>
 
     <!-- List of Surveys -->
     <section>
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">{m.existing_surveys_title()}</h2>
-            <button
+            <h2 class="text-xl font-semibold">{m.existing_surveys_title()}</h2>
+            <Button.Root
+                variant="ghost"
+                size="icon"
                 onclick={initiateNewSurveyCreation}
-                class="p-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
                 title={m.create_new_survey_title()}
             >
-                <Icon src={PlusCircle} class="w-6 h-6" />
-            </button>
+                <PlusCircle class="w-6 h-6 text-green-600 dark:text-green-400" />
+            </Button.Root>
         </div>
 
         {#if $surveys.length === 0}
-            <p class="text-gray-500 dark:text-gray-400 text-center py-4">{m.no_surveys_yet()}</p>
+            <p class="text-muted-foreground text-center py-4">{m.no_surveys_yet()}</p>
         {:else}
             <ul class="space-y-3">
                 {#each $surveys as survey (survey.id)}
-                    <li class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-md shadow hover:shadow-lg transition-shadow">
-                        <span class="text-lg text-gray-800 dark:text-gray-100 truncate flex-1">
-                            {survey.question || (m.new_survey_name_placeholder ? m.new_survey_name_placeholder() : '(New Survey - Edit to add question)')}
-                        </span>
-                        <div class="flex items-center gap-2">
-                            <button
-                                onclick={() => handleSelectSurvey(survey.id)}
-                                class="p-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
-                                title={m.start_survey_button_title()}
-                            >
-                                <Icon src={PlayCircle} class="w-6 h-6" />
-                            </button>
-                            <button
-                                onclick={() => handleViewResults(survey.id)}
-                                class="p-2 text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-300 transition-colors"
-                                title={m.view_survey_results_title()}
-                            >
-                                <Icon src={ChartBar} class="w-6 h-6" />
-                            </button>
-                            <button
-                                onclick={() => handleEditSurvey(survey.id)} 
-                                class="p-2 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
-                                title={m.edit_survey_settings_title()} 
-                            >
-                                <Icon src={Pencil} class="w-6 h-6" />
-                            </button>
-                            <button
-                                onclick={() => requestResetResults(survey.id)}
-                                class="p-2 text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-colors"
-                                title={m.reset_survey_results_title()}
-                            >
-                                <Icon src={ArrowPath} class="w-6 h-6" />
-                            </button>
-                            <button
-                                onclick={() => requestDeleteSurvey(survey.id)}
-                                class="p-2 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
-                                title={m.delete_survey_button_title()}
-                            >
-                                <Icon src={Trash} class="w-6 h-6" />
-                            </button>
-                        </div>
-                    </li>
+                    <Card.Root class="flex items-center justify-between p-4 hover:shadow-lg transition-shadow">
+                        <Card.Header class="p-0 flex-1">
+                            <Card.Title class="text-lg truncate">
+                                {survey.question || (m.new_survey_name_placeholder ? m.new_survey_name_placeholder() : '(New Survey - Edit to add question)')}
+                            </Card.Title>
+                        </Card.Header>
+                        <Card.Content class="p-0 flex items-center gap-1 sm:gap-2">
+                            <Button.Root variant="ghost" size="icon" onclick={() => handleSelectSurvey(survey.id)} title={m.start_survey_button_title()}>
+                                <PlayCircle class="w-5 h-5 sm:w-6 sm:h-6 text-green-600 dark:text-green-400" />
+                            </Button.Root>
+                            <Button.Root variant="ghost" size="icon" onclick={() => handleViewResults(survey.id)} title={m.view_survey_results_title()}>
+                                <ChartBar class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 dark:text-yellow-400" />
+                            </Button.Root>
+                            <Button.Root variant="ghost" size="icon" onclick={() => handleEditSurvey(survey.id)} title={m.edit_survey_settings_title()}>
+                                <Pencil class="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 dark:text-blue-400" />
+                            </Button.Root>
+                            <Button.Root variant="ghost" size="icon" onclick={() => requestResetResults(survey.id)} title={m.reset_survey_results_title()}>
+                                <ArrowRightCircle class="w-5 h-5 sm:w-6 sm:h-6 text-orange-500 dark:text-orange-400" />
+                            </Button.Root>
+                            <Button.Root variant="ghost" size="icon" onclick={() => requestDeleteSurvey(survey.id)} title={m.delete_survey_button_title()}>
+                                <Trash class="w-5 h-5 sm:w-6 sm:h-6 text-red-500 dark:text-red-400" />
+                            </Button.Root>
+                        </Card.Content>
+                    </Card.Root>
                 {/each}
             </ul>
         {/if}
@@ -175,9 +151,6 @@
     onCancel={cancelResetResults}
 />
 
-<!-- Edit Survey Dialog -->
-<!-- Conditionally render EditSurveyDialog: only when surveyIdToActOn is set AND showEditDialog is true. -->
-<!-- This ensures the component is re-created/destroyed when not active, helping with re-initialization. -->
 {#if showEditDialog && surveyIdToActOn}
   <EditSurveyDialog bind:show={showEditDialog} surveyIdToEdit={surveyIdToActOn} />
 {/if}

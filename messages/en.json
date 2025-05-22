@@ -71,5 +71,6 @@
   "notFoundText": "Oops! The page you are looking for does not exist.",
   "goToHomepageButton": "Go to Homepage",
   "theme_switcher_to_light_aria_label": "Switch to light mode",
-  "theme_switcher_to_dark_aria_label": "Switch to dark mode"
+  "theme_switcher_to_dark_aria_label": "Switch to dark mode",
+  "select_language_placeholder": "Select Language"
 }
