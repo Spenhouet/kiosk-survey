@@ -42,7 +42,7 @@
                             </span>
                             {#if percentage > 0}<span class="text-sm text-muted-foreground">{percentage.toFixed(1)}%</span>{/if}
                         </div>
-                        <Progress.Root value={percentage} class="h-6 sm:h-8" />
+                        <Progress.Root value={percentage} class="h-6 sm:h-8" style="background-color: {currentSurvey?.appearance.buttonColor || ''};" />
                     </div>
                 {/each}
             </div>
@@ -54,6 +54,7 @@
         <Button.Root
             onclick={() => goto(resolveRoute(`/survey?id=${surveyIdFromQuery}`, {}))}
             class="mt-8"
+            style="background-color: {currentSurvey?.appearance.buttonColor || ''};"
             size="lg" 
         >
             {m.repeat_survey_button()}
