@@ -52,7 +52,7 @@
 
 {#if survey}
     <div class="w-full max-w-lg text-center">
-        <h1 class="text-3xl sm:text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">
+        <h1 class="text-3xl sm:text-4xl font-bold mb-8">
             {currentSurveyQuestion}
         </h1>
 
@@ -60,7 +60,8 @@
             {#each currentSurveyAnswers as answer (answer.id)}
                 <Button.Root
                     onclick={() => handleAnswer(answer.id)}
-                    class="grow px-6 min-w-30"
+                    class="grow px-6 min-w-30 "
+                    style="background-color: {survey?.appearance.buttonColor || ''};"
                     size="lg"
                     variant="default"
                 >{answer.text}</Button.Root>

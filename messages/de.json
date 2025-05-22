@@ -44,7 +44,7 @@
   "existing_surveys_title": "Deine Umfragen",
   "no_surveys_yet": "Noch keine Umfragen erstellt. Füge eine hinzu, um zu starten!",
   "start_survey_button_title": "Diese Umfrage starten",
-  "edit_survey_settings_title": "Umfrage Bearbeiten",
+  "edit_survey_settings_title": "Umfrage bearbeiten",
   "edit_survey_settings_title_dynamic": "Einstellungen für: {name}",
   "delete_survey_button_title": "Diese Umfrage löschen",
   "survey_name_required": "Umfragename darf nicht leer sein.",
