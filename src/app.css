@@ -44,10 +44,6 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 
   --radius: 0.5rem;
-
-  /* Prevent zooming */
-  touch-action: pan-x pan-y;
-  height: 100%
 }
 
 .dark {
