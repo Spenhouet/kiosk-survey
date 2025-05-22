@@ -70,5 +70,6 @@
   "theme_switcher_to_light_aria_label": "Hellen Modus aktivieren",
   "theme_switcher_to_dark_aria_label": "Dunklen Modus aktivieren",
   "select_language_placeholder": "Sprache auswählen",
-  "close_button": "Schließen"
+  "close_button": "Schließen",
+  "save_changes_button": "Änderungen speichern"
 }
