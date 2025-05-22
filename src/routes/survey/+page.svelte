@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { page } from '$app/state'; // Assuming $app/state is correct for your Svelte version (used in your original code)
+    import { page } from '$app/state';
     import { surveys, recordAnswer } from '$lib/stores';
     import { goto } from '$app/navigation';
     import { m } from '$lib/paraglide/messages';
-    import PillButton from '$lib/components/PillButton.svelte';
     import { resolveRoute } from '$app/paths';
+    import * as Button from "$lib/components/ui/button";
 
     // Get surveyId from query parameter 'id'
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
@@ -58,15 +58,17 @@
 
         <div class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
             {#each currentSurveyAnswers as answer (answer.id)}
-                <PillButton
-                    onClick={() => handleAnswer(answer.id)}
-                    customClass="flex-grow px-6 min-w-30"
-                >{answer.text}</PillButton>
+                <Button.Root
+                    onclick={() => handleAnswer(answer.id)}
+                    class="flex-grow px-6 min-w-30"
+                    size="lg"
+                    variant="default"
+                >{answer.text}</Button.Root>
             {/each}
         </div>
     </div>
 {:else}
-    <p class="text-gray-600 dark:text-gray-400 text-center py-4">
+    <p class="text-muted-foreground text-center py-4">
         {surveyIdFromQuery ? m.loading_survey_data() : m.survey_not_found_message()}
     </p>
 {/if}

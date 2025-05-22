@@ -1,29 +1,31 @@
 <script lang="ts">
     import { surveys } from '$lib/stores';
-    import { page } from '$app/state'; // Import page store to get surveyId from params
+    import { page } from '$app/state';
+    import * as Button from "$lib/components/ui/button";
+    import { cn } from "$lib/utils";
 
-    let {
-        children,
-        onClick,
-        disabled = false,
-        customClass = ''
-    } = $props();
+    // Define props using Svelte 5 runes
+    let { children, onClick, disabled = false, customClass = '' } = $props<{ 
+        children: any, 
+        onClick: (event: MouseEvent) => void, 
+        disabled?: boolean, 
+        customClass?: string 
+    }>();
 
-    let currentPillButtonColor = $derived.by(() => {
+    // Correctly use $derived for reactive computation
+    let currentPillButtonColor = $derived(() => {
         const id = page.url.searchParams.get('id');
-        if (!id) return '#007bff'; // Default color if no surveyId in route
+        if (!id) return '#007bff'; // Default color
         const surveyInstance = $surveys.find(s => s.id === id);
-        return surveyInstance ? surveyInstance.appearance.pillButtonColor : '#007bff'; // Default if survey not found
+        return surveyInstance ? surveyInstance.appearance.pillButtonColor : '#007bff';
     });
-
-    const baseClasses = "p-3 text-lg rounded-full font-semibold transition-colors duration-150 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed text-white";
 </script>
 
-<button
-    onclick={onClick} 
-    disabled={disabled}
-    class="{baseClasses} {customClass} focus:ring-[var(--pill-bg-color)] hover:brightness-90"
-    style="--pill-bg-color: {currentPillButtonColor}; background-color: var(--pill-bg-color);"
+<Button.Root
+    on:click={onClick} 
+    {disabled} 
+    class={cn("p-3 text-lg rounded-full font-semibold shadow-md text-white hover:brightness-90 focus:ring-2 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed", customClass)}
+    style="background-color: {currentPillButtonColor}; --pill-bg-color: {currentPillButtonColor}; outline: none; box-shadow: none;"
 >
     {@render children()}
-</button>
+</Button.Root>
