@@ -69,5 +69,7 @@
   "edit_survey_name_label": "Survey Name",
   "notFoundTitle": "404 - Page Not Found",
   "notFoundText": "Oops! The page you are looking for does not exist.",
-  "goToHomepageButton": "Go to Homepage"
+  "goToHomepageButton": "Go to Homepage",
+  "theme_switcher_to_light_aria_label": "Switch to light mode",
+  "theme_switcher_to_dark_aria_label": "Switch to dark mode"
 }

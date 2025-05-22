@@ -52,7 +52,7 @@
 
 {#if survey}
     <div class="w-full max-w-lg text-center">
-        <h1 class="text-3xl sm:text-4xl font-bold mb-8 text-gray-100">
+        <h1 class="text-3xl sm:text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">
             {currentSurveyQuestion}
         </h1>
 
@@ -66,7 +66,7 @@
         </div>
     </div>
 {:else}
-    <p class="text-gray-400 text-center py-4">
+    <p class="text-gray-600 dark:text-gray-400 text-center py-4">
         {surveyIdFromQuery ? m.loading_survey_data() : m.survey_not_found_message()}
     </p>
 {/if}

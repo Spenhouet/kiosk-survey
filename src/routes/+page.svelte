@@ -88,16 +88,16 @@
 
 <div class="w-full max-w-3xl mx-auto p-6 sm:p-8 space-y-6">
     <div class="flex justify-between items-center">
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-100">{m.surveys_page_title()}</h1>
+        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-gray-100">{m.surveys_page_title()}</h1>
     </div>
 
     <!-- List of Surveys -->
     <section>
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-gray-200">{m.existing_surveys_title()}</h2>
+            <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">{m.existing_surveys_title()}</h2>
             <button
                 onclick={initiateNewSurveyCreation}
-                class="p-2 text-green-400 hover:text-green-300 transition-colors"
+                class="p-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
                 title={m.create_new_survey_title()}
             >
                 <Icon src={PlusCircle} class="w-6 h-6" />
@@ -105,46 +105,46 @@
         </div>
 
         {#if $surveys.length === 0}
-            <p class="text-gray-400 text-center py-4">{m.no_surveys_yet()}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-center py-4">{m.no_surveys_yet()}</p>
         {:else}
             <ul class="space-y-3">
                 {#each $surveys as survey (survey.id)}
-                    <li class="flex items-center justify-between bg-gray-700 p-4 rounded-md shadow hover:shadow-lg transition-shadow">
-                        <span class="text-lg text-gray-100 truncate flex-1">
+                    <li class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-md shadow hover:shadow-lg transition-shadow">
+                        <span class="text-lg text-gray-800 dark:text-gray-100 truncate flex-1">
                             {survey.question || (m.new_survey_name_placeholder ? m.new_survey_name_placeholder() : '(New Survey - Edit to add question)')}
                         </span>
                         <div class="flex items-center gap-2">
                             <button
                                 onclick={() => handleSelectSurvey(survey.id)}
-                                class="p-2 text-green-400 hover:text-green-300 transition-colors"
+                                class="p-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
                                 title={m.start_survey_button_title()}
                             >
                                 <Icon src={PlayCircle} class="w-6 h-6" />
                             </button>
                             <button
                                 onclick={() => handleViewResults(survey.id)}
-                                class="p-2 text-yellow-400 hover:text-yellow-300 transition-colors"
+                                class="p-2 text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-300 transition-colors"
                                 title={m.view_survey_results_title()}
                             >
                                 <Icon src={ChartBar} class="w-6 h-6" />
                             </button>
                             <button
                                 onclick={() => handleEditSurvey(survey.id)} 
-                                class="p-2 text-blue-400 hover:text-blue-300 transition-colors"
+                                class="p-2 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
                                 title={m.edit_survey_settings_title()} 
                             >
                                 <Icon src={Pencil} class="w-6 h-6" />
                             </button>
                             <button
                                 onclick={() => requestResetResults(survey.id)}
-                                class="p-2 text-orange-400 hover:text-orange-300 transition-colors"
+                                class="p-2 text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-colors"
                                 title={m.reset_survey_results_title()}
                             >
                                 <Icon src={ArrowPath} class="w-6 h-6" />
                             </button>
                             <button
                                 onclick={() => requestDeleteSurvey(survey.id)}
-                                class="p-2 text-red-400 hover:text-red-300 transition-colors"
+                                class="p-2 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
                                 title={m.delete_survey_button_title()}
                             >
                                 <Icon src={Trash} class="w-6 h-6" />

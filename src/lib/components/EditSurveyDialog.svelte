@@ -116,7 +116,7 @@
 >
     <div 
         bind:this={dialogElement}
-        class="w-full max-w-2xl bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl space-y-6 relative overflow-y-auto max-h-[90vh]"
+        class="w-full max-w-2xl bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl space-y-6 relative overflow-y-auto max-h-[90vh]"
         role="dialog"
         aria-modal="true"
         aria-labelledby={dialogTitleId}
@@ -126,43 +126,43 @@
             onclick={handleClose} 
             title={m.cancel_button ? m.cancel_button() : 'Close'} 
             aria-label={m.cancel_button ? m.cancel_button() : 'Close dialog'}
-            class="absolute top-3 right-3 text-gray-400 hover:text-gray-200 transition-colors p-1"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors p-1"
         >
             <Icon src={XMark} class="w-6 h-6" />
         </button>
         <div class="flex justify-between items-center mb-6">
-            <h2 id={dialogTitleId} class="text-2xl sm:text-3xl font-bold text-gray-100 truncate pr-2">
+            <h2 id={dialogTitleId} class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 truncate pr-2">
                 {m.edit_survey_settings_title ? m.edit_survey_settings_title() : 'Edit Survey'}
             </h2>
         </div>
 
         <section>
-            <label for="surveyQuestionDialog" class="block text-lg font-medium text-gray-200 mb-2">{m.edit_question_label ? m.edit_question_label() : "Question"}</label>
+            <label for="surveyQuestionDialog" class="block text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">{m.edit_question_label ? m.edit_question_label() : "Question"}</label>
             <textarea
                 id="surveyQuestionDialog"
                 bind:value={editableQuestion}
                 rows="2"
                 placeholder={m.edit_question_label ? m.edit_question_label() : "Enter question"}
-                class="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
+                class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
             ></textarea>
         </section>
 
         <section>
-            <h3 class="text-lg font-medium text-gray-200 mb-3">{m.answer_options_label ? m.answer_options_label() : "Answers"}</h3>
+            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200 mb-3">{m.answer_options_label ? m.answer_options_label() : "Answers"}</h3>
             <div class="space-y-3 mb-4 max-h-60 overflow-y-auto pr-2">
                 {#each editableAnswers as answer, i (answer.id)}
-                    <div class="flex items-center gap-2 p-2 bg-gray-700 rounded">
+                    <div class="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-700 rounded">
                         <input
                             type="text"
                             placeholder={m.option_text_placeholder ? m.option_text_placeholder() : "Answer"}
                             bind:value={answer.text}
-                            class="flex-grow p-2 bg-gray-600 border border-gray-500 rounded text-gray-100"
+                            class="flex-grow p-2 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded text-gray-900 dark:text-gray-100"
                         />
                         <button
                             type="button"
                             onclick={() => removeAnswer(answer.id)}
                             aria-label={m.remove_answer_label ? m.remove_answer_label() : "Remove answer option"}
-                            class="p-2 text-red-400 hover:text-red-300 transition-colors"
+                            class="p-2 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
                         >
                             <Icon src={Trash} class="w-5 h-5" />
                         </button>
@@ -182,45 +182,45 @@
                             handleSaveChanges(); // Save after adding the answer
                         } 
                     }}
-                    class="flex-grow min-w-0 p-2 bg-gray-700 border border-gray-600 rounded text-gray-100"
+                    class="flex-grow min-w-0 p-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-gray-100"
                 />
                 <div class="flex-shrink-0">
-                    <PillButton onClick={addAnswer} customClass="bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm">{m.add_answer_button()}</PillButton>
+                    <PillButton onClick={addAnswer} customClass="text-white bg-green-600 hover:bg-green-700 focus:ring-green-500 !p-2.5 text-sm">{m.add_answer_button()}</PillButton>
                 </div>
             </div>
         </section>
 
         <section>
-            <h3 class="text-lg font-medium text-gray-200 mb-3 flex items-center">
-                <Icon src={PaintBrush} class="w-5 h-5 mr-2 text-indigo-400" aria-hidden="true" />
+            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200 mb-3 flex items-center">
+                <Icon src={PaintBrush} class="w-5 h-5 mr-2 text-indigo-400 dark:text-indigo-500" aria-hidden="true" />
                 {m.appearance_settings_title ? m.appearance_settings_title() : "Appearance"}
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="appBackgroundColorDialog" class="block text-sm font-medium text-gray-300 mb-1">{m.background_color_label ? m.background_color_label() : "Background"}</label>
+                    <label for="appBackgroundColorDialog" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{m.background_color_label ? m.background_color_label() : "Background"}</label>
                     <input
                         type="color"
                         id="appBackgroundColorDialog"
                         bind:value={editableAppBackgroundColor}
-                        class="w-full h-10 p-1 bg-gray-700 border border-gray-600 rounded-md cursor-pointer"
+                        class="w-full h-10 p-1 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer"
                         aria-label={m.background_color_label ? m.background_color_label() : "Background color picker"}
                     />
                 </div>
                 <div>
-                    <label for="pillButtonColorDialog" class="block text-sm font-medium text-gray-300 mb-1">{m.button_color_label ? m.button_color_label() : "Button Color"}</label>
+                    <label for="pillButtonColorDialog" class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{m.button_color_label ? m.button_color_label() : "Button Color"}</label>
                     <input
                         type="color"
                         id="pillButtonColorDialog"
                         bind:value={editablePillButtonColor}
-                        class="w-full h-10 p-1 bg-gray-700 border border-gray-600 rounded-md cursor-pointer"
+                        class="w-full h-10 p-1 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md cursor-pointer"
                         aria-label={m.button_color_label ? m.button_color_label() : "Button color picker"}
                     />
                 </div>
             </div>
         </section>
          <div class="flex justify-end gap-3 pt-6">
-            <PillButton onClick={handleClose} customClass="px-4 py-2 text-gray-100 bg-gray-600 hover:bg-gray-500 focus:ring-gray-400" >{m.cancel_button()}</PillButton>
-            <PillButton onClick={handleSaveChanges} customClass="px-4 py-2 text-gray-100 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">{ m.save_button()}</PillButton>
+            <PillButton onClick={handleClose} customClass="px-4 py-2 text-gray-700 dark:text-gray-100 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 focus:ring-gray-400 dark:focus:ring-gray-500" >{m.cancel_button()}</PillButton>
+            <PillButton onClick={handleSaveChanges} customClass="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">{ m.save_button()}</PillButton>
         </div>
     </div>
 </div>
