@@ -26,8 +26,8 @@
     <!-- Overview Icon (Left) -->
     <div>
       {#if page.url.pathname !== resolveRoute('/', {})}
-        <Button.Root href={resolveRoute('/', {})} variant="ghost" size="icon" aria-label={m.navigate_home_aria_label() ? m.navigate_home_aria_label() : 'Manage Surveys'}>
-          <List class='h-7 w-7 sm:h-8 sm:w-8' />
+        <Button.Root href={resolveRoute('/', {})} variant="outline" size="icon" aria-label={m.navigate_home_aria_label() ? m.navigate_home_aria_label() : 'Manage Surveys'}>
+          <List />
         </Button.Root>
       {/if}
     </div>

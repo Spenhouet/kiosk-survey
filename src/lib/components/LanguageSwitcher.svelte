@@ -17,6 +17,7 @@
     {m[`locale_name_${currentLang}`]()}
   </Select.Trigger>
   <Select.Content>
+    <Select.Label>{m.select_language_placeholder()}</Select.Label>
     {#each locales as tag}
       <Select.Item value={tag}>{m[`locale_name_${tag}`]()}</Select.Item>
     {/each}
