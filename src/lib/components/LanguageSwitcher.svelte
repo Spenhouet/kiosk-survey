@@ -2,6 +2,11 @@
   import { m } from "$lib/paraglide/messages.js";
   import { getLocale, setLocale, locales } from "$lib/paraglide/runtime";
   import * as Select from "$lib/components/ui/select";
+	import { cn } from "$lib/utils.js";
+
+  let {
+		class: className,
+	} = $props();
   
   function handleLanguageChange(value: string | undefined) {
     if (value) {
@@ -13,7 +18,7 @@
 </script>
 
 <Select.Root type="single" name="language" value={currentLang} onValueChange={handleLanguageChange}>
-  <Select.Trigger class="w-[180px]">
+  <Select.Trigger class={cn("w-[180px] bg-secondary dark:bg-secondary text-secondary-foreground dark:text-secondary-foreground shadow-xs hover:bg-secondary/80 dark:hover:bg-secondary/80", className)}>
     {m[`locale_name_${currentLang}`]()}
   </Select.Trigger>
   <Select.Content>

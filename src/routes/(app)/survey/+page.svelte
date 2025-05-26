@@ -6,6 +6,7 @@
     import { m } from '$lib/paraglide/messages';
     import { resolveRoute } from '$app/paths';
     import * as Button from "$lib/components/ui/button";
+    import { computeBrightness } from "$lib/utils/color.js";
 
     // Get surveyId from query parameter 'id'
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
@@ -61,7 +62,14 @@
                 <Button.Root
                     onclick={() => handleAnswer(answer.id)}
                     class="grow px-6 min-w-30 "
-                    style="background-color: {survey?.appearance.buttonColor || ''};"
+                    style="
+                    background-color: {survey?.appearance.buttonColor || ''};
+                    color: {
+                        (() => {
+                        return computeBrightness(survey?.appearance.buttonColor) > 128 ? 'black' : 'white';
+                        })()
+                    };
+                    "
                     size="lg"
                     variant="default"
                 >{answer.text}</Button.Root>

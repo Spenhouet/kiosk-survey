@@ -6,6 +6,7 @@
     import { resolveRoute } from '$app/paths';
     import * as Button from "$lib/components/ui/button";
     import * as Progress from "$lib/components/ui/progress";
+    import { computeBrightness } from "$lib/utils/color.js";
 
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
     let currentSurvey = $derived(surveyIdFromQuery ? $surveys.find(s => s.id === surveyIdFromQuery) : undefined);
@@ -26,7 +27,7 @@
 {#if currentSurvey}
     <div class="w-full max-w-xl text-center">
         <h2 class="text-2xl sm:text-3xl font-bold mb-6">
-            {m.results_page_title()}: {currentSurvey.question}
+            {currentSurvey.question}
         </h2>
 
         {#if totalVotes > 0}
@@ -40,13 +41,13 @@
                             <span class="text-md sm:text-lg">
                                 {display.text}: {votes} {votes === 1 ? m.votes_suffix_singular() : m.votes_suffix_plural()}
                             </span>
-                            {#if percentage > 0}<span class="text-sm text-muted-foreground">{percentage.toFixed(1)}%</span>{/if}
+                            {#if percentage > 0}<span class="text-md sm:text-lg">{percentage.toFixed(1)}%</span>{/if}
                         </div>
                         <Progress.Root value={percentage} class="h-6 sm:h-8" style="background-color: {currentSurvey?.appearance.buttonColor || ''};" />
                     </div>
                 {/each}
             </div>
-            <p class="text-muted-foreground">{m.total_votes_label({ count: totalVotes })}</p>
+            <p class="">{m.total_votes_label({ count: totalVotes })}</p>
         {:else}
             <p class="text-xl text-muted-foreground my-8">{m.no_responses_message()}</p>
         {/if}
@@ -54,7 +55,14 @@
         <Button.Root
             onclick={() => goto(resolveRoute(`/survey?id=${surveyIdFromQuery}`, {}))}
             class="mt-8"
-            style="background-color: {currentSurvey?.appearance.buttonColor || ''};"
+            style="
+            background-color: {currentSurvey?.appearance.buttonColor || ''};
+            color: {
+                (() => {
+                return computeBrightness(currentSurvey?.appearance.buttonColor) > 128 ? 'black' : 'white';
+                })()
+            };
+            "
             size="lg" 
         >
             {m.repeat_survey_button()}

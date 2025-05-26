@@ -6,7 +6,7 @@
   "results_page_title": "Survey Results",
   "settings_page_title": "Survey Settings",
   "default_survey_question": "Do you like KioskSurvey?",
-  "repeat_survey_button": "Repeat Survey",
+  "repeat_survey_button": "Back to Survey",
   "settings_icon_label": "Settings",
   "edit_question_label": "Survey Question",
   "answer_options_label": "Answer Options",
