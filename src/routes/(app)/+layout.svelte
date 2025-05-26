@@ -26,15 +26,15 @@
     <!-- Overview Icon (Left) -->
     <div>
       {#if page.url.pathname !== resolveRoute('/', {})}
-        <Button.Root href={resolveRoute('/', {})} variant="outline" size="icon" aria-label={m.navigate_home_aria_label() ? m.navigate_home_aria_label() : 'Manage Surveys'}>
+        <Button.Root href={resolveRoute('/', {})} variant="secondary" size="icon" aria-label={m.navigate_home_aria_label() ? m.navigate_home_aria_label() : 'Manage Surveys'}>
           <List />
         </Button.Root>
       {/if}
     </div>
     <!-- Right Controls: Language Switcher and Theme Toggle -->
     <div class="flex items-center gap-4">
-      <LanguageSwitcher />
-      <ModeSwitcher />
+      <LanguageSwitcher class="" />
+      <ModeSwitcher variant="secondary" />
     </div>
   </div>
 
