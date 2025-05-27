@@ -8,3 +8,11 @@ export function computeBrightness(hex: string): number {
     // Perceived brightness formula
     return (r * 299 + g * 587 + b * 114) / 1000;
 }
+
+export function getContrastColor(hex: string): string {
+    // Compute brightness
+    const brightness = computeBrightness(hex);
+    // Return black or white based on brightness
+    // return brightness > 128 ? 'var(--primary)' : 'var(--primary-foreground)';
+    return brightness > 128 ? 'hsl(240 5.9% 10%)' : 'hsl(0 0% 98%)';
+}

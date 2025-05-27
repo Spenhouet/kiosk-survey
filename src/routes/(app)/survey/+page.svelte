@@ -6,7 +6,7 @@
     import { m } from '$lib/paraglide/messages';
     import { resolveRoute } from '$app/paths';
     import * as Button from "$lib/components/ui/button";
-    import { computeBrightness } from "$lib/utils/color.js";
+    import { getContrastColor } from "$lib/utils/color.js";
 
     // Get surveyId from query parameter 'id'
     let surveyIdFromQuery = $derived(page.url.searchParams.get('id'));
@@ -53,7 +53,7 @@
 
 {#if survey}
     <div class="w-full max-w-lg text-center">
-        <h1 class="text-3xl sm:text-4xl font-bold mb-8">
+        <h1 class="text-3xl sm:text-4xl font-bold mb-8" style="color: {getContrastColor(survey?.appearance.backgroundColor)};">
             {currentSurveyQuestion}
         </h1>
 
@@ -64,11 +64,7 @@
                     class="grow px-6 min-w-30 "
                     style="
                     background-color: {survey?.appearance.buttonColor || ''};
-                    color: {
-                        (() => {
-                        return computeBrightness(survey?.appearance.buttonColor) > 128 ? 'black' : 'white';
-                        })()
-                    };
+                    color: {getContrastColor(survey?.appearance.buttonColor)};
                     "
                     size="lg"
                     variant="default"
