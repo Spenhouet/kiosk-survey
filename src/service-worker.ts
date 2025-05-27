@@ -1,6 +1,9 @@
 /// <reference lib="webworker" />
 
+// @ts-expect-error: Ignore missing module error during development/build
 import { build, files, version } from '$service-worker';
+// @ts-expect-error: Ignore missing module error during development/build
+import { resolveRoute } from '$app/paths';
 
 const CACHE_NAME = `cache-${version}`;
 
@@ -54,30 +57,55 @@ self.addEventListener('fetch', (event) => {
   }
 
   // For navigation requests (HTML pages), try network first, then cache.
-  // This ensures users get the latest page if online, but can still access it offline.
   if (request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         try {
+          // Try network first
           const networkResponse = await fetch(request);
+          // If the fetch was successful, cache the response for future offline use
+          // Only cache http/https requests
+          if (request.url.startsWith('http') && networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              console.log('[Service Worker] Caching new navigation response:', request.url);
+              cache.put(request, responseToCache);
+            });
+          }
           return networkResponse;
         } catch (error) {
-          console.log('[Service Worker] Fetch failed for navigation; returning offline page from cache.', request.url, error);
+          // Network failed, try to serve the app shell from cache
+          console.log('[Service Worker] Network fetch failed for navigation. Attempting to serve app shell from cache.', request.url, error);
           const cache = await caches.open(CACHE_NAME);
-          // Fallback to the root page. Consider creating a specific offline.html page and caching it.
-          const cachedResponse = await cache.match('/') || await cache.match('/index.html');
-          if (cachedResponse) {
-            return cachedResponse;
+          
+          // Attempt to retrieve the main application page (shell)
+          // Common paths for SPAs are '/' or '/index.html'
+          let cachedResponse = await cache.match(resolveRoute('/', {}));
+          if (!cachedResponse) {
+            cachedResponse = await cache.match(resolveRoute('/index.html', {}));
           }
-          // If no root page in cache, provide a very basic offline response.
-          return new Response('You are offline. Please check your internet connection.', {
-            status: 408,
-            headers: { 'Content-Type': 'text/plain' },
-          });
+
+          // const cachedResponse = await cache.match(request);
+          if (cachedResponse) {
+            // App shell found in cache, return it
+            console.log('[Service Worker] Serving app shell from cache for failed navigation.', cachedResponse.url);
+            return cachedResponse;
+          } else {
+            // App shell not found in cache.
+            // Instead of returning a custom "You are offline" message,
+            // let the browser handle it as a standard network failure for the navigation request.
+            console.warn('[Service Worker] App shell not found in cache for failed navigation. Browser will display default offline page.', request.url);
+            // Returning undefined signals that the service worker is not handling this fetch event,
+            // allowing the browser to use its default network error handling (e.g., show an offline page).
+            return new Response('You are offline. Please check your internet connection.', {
+              status: 408,
+              headers: { 'Content-Type': 'text/plain' },
+            });return undefined;
+          }
         }
       })()
     );
-    return;
+    return; // End handling for navigate requests
   }
 
   // For other requests (assets like JS, CSS, images), use a cache-first strategy.
@@ -88,15 +116,15 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse;
       }
       return fetch(request).then((networkResponse) => {
-        // Optionally, you might want to cache new assets dynamically here if they weren't part of the initial ASSETS_TO_CACHE
-        // For example, if they are loaded on demand.
-        // Be careful with caching opaque responses (cross-origin resources without CORS) as they can take up a lot of space.
-        // if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-        //   const responseToCache = networkResponse.clone();
-        //   caches.open(CACHE_NAME).then(cache => {
-        //     cache.put(request, responseToCache);
-        //   });
-        // }
+        // Cache new assets dynamically if they weren't part of the initial ASSETS_TO_CACHE
+        // Only cache http/https requests
+        if (request.url.startsWith('http') && networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            console.log('[Service Worker] Caching new asset:', request.url);
+            cache.put(request, responseToCache);
+          });
+        }
         return networkResponse;
       }).catch(error => {
         console.error('[Service Worker] Fetch failed for asset:', request.url, error);
