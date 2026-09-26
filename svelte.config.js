@@ -6,7 +6,8 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
-      fallback: '404.html'
+      // The Android (Capacitor) build needs an index.html entry point
+      fallback: process.env.CAPACITOR ? 'index.html' : '404.html'
     }),
     paths: {
       base: process.env.NODE_ENV === 'production' ? process.env.BASE_PATH : ''
