@@ -21,6 +21,48 @@ KioskSurvey
 *   **Persistent Storage:** Survey configurations and results are saved in the browser's local storage.
 *   **Responsive Design:** Adapts to various screen sizes, suitable for tablets and desktops.
 
+## Android App
+
+KioskSurvey is also available as an Android app. The APK bundles the web app, so it runs fully offline. Each release on GitHub includes a signed APK built by the [Android Release](.github/workflows/android-release.yml) workflow.
+
+### Install via Obtainium
+
+[Obtainium](https://github.com/ImranR98/Obtainium) installs apps directly from their GitHub releases and keeps them updated.
+
+1.  Install Obtainium from its [releases page](https://github.com/ImranR98/Obtainium/releases) or [F-Droid](https://f-droid.org/packages/dev.imranr.obtainium.fdroid/).
+2.  Open Obtainium and tap **Add App**.
+3.  Enter the source URL `https://github.com/Spenhouet/kiosk-survey` and tap **Add**.
+4.  Tap **Install**. Allow Obtainium to install unknown apps if Android asks.
+
+Obtainium checks for new releases in the background and offers updates when a new version is published.
+
+Alternatively, [add KioskSurvey to Obtainium directly](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/Spenhouet/kiosk-survey) from your Android device.
+
+### Manual install
+
+Download the latest `kiosk-survey-*.apk` from the [releases page](https://github.com/Spenhouet/kiosk-survey/releases/latest) and open it on your device.
+
+### Building the APK locally
+
+Requires JDK 21 and the Android SDK.
+
+```bash
+CAPACITOR=1 bun run build
+bunx cap sync android
+cd android && ./gradlew assembleRelease
+```
+
+### Publishing a release
+
+Push a version tag. The workflow builds the APK, signs it and attaches it to a GitHub release.
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Signing uses the repository secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` and `ANDROID_KEY_PASSWORD`. Every release must be signed with the same key, otherwise Android refuses to install the update.
+
 ## Tech Stack
 
 *   **SvelteKit:** Frontend framework for building the application.
@@ -28,6 +70,7 @@ KioskSurvey
 *   **TypeScript:** For type safety and improved developer experience.
 *   **shadcn & Tailwind CSS:** For styling the user interface.
 *   **Paraglide JS:** For internationalization (i18n) and managing translations.
+*   **Capacitor:** Packages the web app as an Android APK.
 *   **Vite:** Build tool for fast development and optimized production builds.
 *   **Bun:** Used as the runtime and package manager (implied by `bun.lockb`).
 *   **Playwright:** For End-to-End testing.
