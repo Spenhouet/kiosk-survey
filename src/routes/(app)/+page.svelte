@@ -130,6 +130,10 @@
             </ul>
         {/if}
     </section>
+    <footer class="mt-8 text-center text-xs text-muted-foreground">
+        <a href="https://spenhouet.com/impressum/" class="hover:underline">{m.legal_notice()}</a> ·
+        <a href="https://spenhouet.com/datenschutz/" class="hover:underline">{m.privacy_policy()}</a>
+    </footer>
 </div>
 
 <!-- Delete Confirmation Modal -->
