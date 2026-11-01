@@ -71,5 +71,7 @@
   "theme_switcher_to_dark_aria_label": "Dunklen Modus aktivieren",
   "select_language_placeholder": "Sprache auswählen",
   "close_button": "Schließen",
-  "save_changes_button": "Änderungen speichern"
+  "save_changes_button": "Änderungen speichern",
+  "legal_notice": "Impressum",
+  "privacy_policy": "Datenschutz"
 }

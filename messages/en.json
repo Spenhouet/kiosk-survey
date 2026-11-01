@@ -73,5 +73,7 @@
   "theme_switcher_to_dark_aria_label": "Switch to dark mode",
   "select_language_placeholder": "Select Language",
   "close_button": "Close",
-  "save_changes_button": "Save Changes"
+  "save_changes_button": "Save Changes",
+  "legal_notice": "Legal notice",
+  "privacy_policy": "Privacy policy"
 }
